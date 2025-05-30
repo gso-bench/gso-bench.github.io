@@ -1,0 +1,64 @@
+{
+  "models": [
+    {
+      "name": "Claude-4-Sonnet",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 4.9,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "Claude-3.7-Sonnet",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 3.8,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "Claude-3.5-V2-Sonnet",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 4.6,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "Claude-3.5-V2-Sonnet",
+      "scaffold": "OpenHands",
+      "setting": "Opt@10",
+      "score": 15.7,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "O4-Mini-high",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 3.6,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "O4-Mini-high",
+      "scaffold": "OpenHands",
+      "setting": "Opt@10",
+      "score": 12.7,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "O3-Mini-high",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 1.3,
+      "date": "2025-05-30"
+    },
+    {
+      "name": "GPT-4o",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 0.0,
+      "date": "2025-05-30"
+    }
+  ],
+  "metadata": {
+    "last_updated": "2024-12-15",
+    "total_tasks": 102
+  }
+}

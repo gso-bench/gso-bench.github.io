@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSO Leaderboard - Software Optimization Benchmark</title>
+    <meta name="description" content="Complete leaderboard for GSO benchmark showing performance of leading SWE-Agents on software optimization tasks.">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <h1>GSO</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="index.html#overview">Overview</a>
+                <a href="leaderboard.html" class="active">Leaderboard</a>
+                <!-- <a href="index.html#dataset">Dataset</a> -->
+                <a href="index.html#analysis">Analysis</a>
+                <!-- <a href="index.html#citation">Citation</a> -->
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="container">
+                <h1 class="hero-title">GSO Leaderboard</h1>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="container">
+                <div class="leaderboard-container">
+                    <div class="leaderboard-loading" id="leaderboard-loading">
+                        <div class="spinner"></div>
+                        <span>Loading leaderboard...</span>
+                    </div>
+                    <div class="leaderboard-table" id="leaderboard-table" style="display: none;">
+                        <!-- Leaderboard will be populated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GSO Benchmark</h3>
+                    <p>Challenging Software Optimization Tasks for Evaluating SWE-Agents</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links</h3>
+                    <ul>
+                        <li><a href="https://github.com/gso-bench/gso">GitHub Repository</a></li>
+                        <li><a href="https://huggingface.co/datasets/manishs/gso">Dataset</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>manishs@berkeley.edu</p>
+                    <p>For questions, please open an issue on GitHub</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 GSO Benchmark. Released under MIT License.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+</body>
+</html>
