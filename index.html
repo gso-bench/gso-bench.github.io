@@ -316,16 +316,18 @@ self._n_frames = count</code></pre>
                                 <p><strong>Lesson:</strong> Agents often resort to superficial Python-level patches when deep systems knowledge is required.</p>
                             </div>
                             <div class="example-code">
-                                <h4>Agent's Failed Approach</h4>
+                                <h4>Agent's Failed Approach (simplified)</h4>
                                 <pre><code># __init__.py
 # Monkey-patch ufunc.at for faster add/subtract operations
 _orig_ufunc_at = ufunc.at
 
 def _at_fast(self, a, indices, values=None):
+    ...
     # Only optimize for 1D numpy arrays
-    if name in ('add', 'subtract') and isinstance(a, np.ndarray):
+    if name in ('add', 'subtract') and isinstance(a, np.ndarray) and a.ndim == 1:
         # Use np.bincount for optimization
         return np.bincount(indices, weights=values, minlength=len(a))
+    ...
     return _orig_ufunc_at(self, a, indices, values)
 
 ufunc.at = _at_fast</code></pre>
