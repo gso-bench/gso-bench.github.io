@@ -521,6 +521,29 @@ class ThemeManager {
     }
 }
 
+// Dark mode toggle functionality
+function initDarkMode() {
+    const toggleButton = document.getElementById('theme-toggle');
+    if (!toggleButton) return;
+
+    const icon = toggleButton.querySelector('.theme-icon');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const stored = localStorage.getItem('theme');
+
+    const apply = (theme) => {
+        document.documentElement.setAttribute('data-theme', theme);
+        if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    };
+
+    apply(stored || (prefersDark ? 'dark' : 'light'));
+
+    toggleButton.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        apply(current);
+        localStorage.setItem('theme', current);
+    });
+}
+
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
@@ -531,7 +554,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new AnimationManager();
     new PerformanceMonitor();
     new ThemeManager();
-    
+    initDarkMode();
+
     console.log('GSO website initialized successfully');
 });
 
