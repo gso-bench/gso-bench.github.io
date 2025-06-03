@@ -156,23 +156,27 @@ a:hover {
     color: var(--text-primary);
 }
 
-.theme-toggle {
+#theme-toggle {
     background: none;
     border: 1px solid var(--border-color);
     border-radius: 6px;
-    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
     cursor: pointer;
     transition: all 0.2s ease;
     color: var(--text-secondary);
 }
 
-.theme-toggle:hover {
+#theme-toggle:hover {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
 }
 
-.theme-icon {
-    font-size: 1rem;
+.theme-icon svg {
     display: block;
 }
 
@@ -309,6 +313,12 @@ a:hover {
     max-width: 800px;
     display: block;
     margin: 0 auto;
+}
+
+[data-theme="dark"] .task-diagram {
+    background-color: #e0e0e0;
+    padding: 0.5rem;
+    border-radius: 6px;
 }
 
 .analysis-figure {
@@ -1053,6 +1063,7 @@ a:focus {
 /* Print styles */
 @media print {
     .navbar,
+    #theme-toggle,
     .theme-toggle,
     .copy-btn {
         display: none;
