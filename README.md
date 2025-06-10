@@ -1,1 +1,1 @@
-# GSO
+# GSO (website)
