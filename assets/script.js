@@ -225,7 +225,10 @@ class LeaderboardManager {
             scoreCell.className = 'score';
             // Date
             const dateCell = row.insertCell();
-            dateCell.textContent = new Date(model.date).toLocaleDateString();
+            // Parse date as local date to avoid timezone conversion issues
+            const dateParts = model.date.split('-');
+            const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            dateCell.textContent = localDate.toLocaleDateString();
             rowIndex++;
         });
         // Render filtered-out (dulled) rows below
@@ -259,7 +262,10 @@ class LeaderboardManager {
             scoreCell.className = 'score';
             // Date
             const dateCell = row.insertCell();
-            dateCell.textContent = new Date(model.date).toLocaleDateString();
+            // Parse date as local date to avoid timezone conversion issues
+            const dateParts = model.date.split('-');
+            const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
+            dateCell.textContent = localDate.toLocaleDateString();
             rowIndex++;
         });
     }
