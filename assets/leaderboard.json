@@ -1,6 +1,13 @@
 {
   "models": [
     {
+      "name": "O3 (high)",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 8.8,
+      "date": "2025-06-09"
+    },
+    {
       "name": "Claude-4-Sonnet",
       "scaffold": "OpenHands",
       "setting": "Opt@1",
@@ -29,21 +36,21 @@
       "date": "2025-05-30"
     },
     {
-      "name": "O4-Mini-high",
+      "name": "O4-Mini (high)",
       "scaffold": "OpenHands",
       "setting": "Opt@1",
       "score": 3.6,
       "date": "2025-05-30"
     },
     {
-      "name": "O4-Mini-high",
+      "name": "O4-Mini (high)",
       "scaffold": "OpenHands",
       "setting": "Opt@10",
       "score": 12.7,
       "date": "2025-05-30"
     },
     {
-      "name": "O3-Mini-high",
+      "name": "O3-Mini (high)",
       "scaffold": "OpenHands",
       "setting": "Opt@1",
       "score": 1.3,

@@ -3,13 +3,16 @@ class LeaderboardManager {
     constructor() {
         this.loadingElement = document.getElementById('leaderboard-loading');
         this.tableElement = document.getElementById('leaderboard-table');
+        this.filtersBar = document.getElementById('leaderboard-filters');
         this.originalData = [];
         this.filteredData = [];
         this.filters = {
             model: 'all',
             scaffold: 'all',
-            setting: 'all'
+            setting: 'Opt@1' // default to Opt@1
         };
+        this.selectedRowKey = null;
+        this.modelSearch = '';
         this.init();
     }
     
@@ -30,6 +33,7 @@ class LeaderboardManager {
             const response = await fetch('assets/leaderboard.json');
             const data = await response.json();
             this.originalData = data.models;
+            this.renderFilters();
             this.renderLeaderboard(data);
         } catch (error) {
             console.error('Failed to load leaderboard JSON:', error);
@@ -37,186 +41,272 @@ class LeaderboardManager {
         }
     }
     
-    applyFilters() {
-        this.filteredData = this.originalData.filter(item => {
-            return (this.filters.model === 'all' || item.name === this.filters.model) &&
-                   (this.filters.scaffold === 'all' || item.scaffold === this.filters.scaffold) &&
-                   (this.filters.setting === 'all' || item.setting === this.filters.setting);
+    renderFilters() {
+        if (!this.filtersBar) return;
+        this.filtersBar.innerHTML = '';
+        // SVG icons
+        // const funnelSVG = `<svg class="filter-icon-inside" width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 5a1 1 0 0 1 1-1h12a1 1 0 0 1 .8 1.6l-4.6 6.6V16a1 1 0 0 1-1.447.894l-2-1A1 1 0 0 1 8 15v-2.8L3.2 6.6A1 1 0 0 1 3 5Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+        // const searchSVG = `<svg class="filter-icon-inside" width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M15 15l-2.5-2.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>`;
+        // Filters group
+        const filtersGroup = document.createElement('div');
+        filtersGroup.className = 'filters-group';
+        const filterKeys = [
+            { key: 'setting', label: 'Setting' }
+        ];
+        filterKeys.forEach(({ key, label }) => {
+            const uniqueValues = [...new Set(this.originalData.map(item => key === 'model' ? item.name : item[key]))];
+            const pill = document.createElement('div');
+            pill.className = 'filter-pill';
+            
+            // Add gear icon for setting filter
+            if (key === 'setting') {
+                const gearIcon = document.createElement('span');
+                gearIcon.className = 'filter-icon-inside';
+                gearIcon.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`;
+                pill.appendChild(gearIcon);
+            }
+            
+            const select = document.createElement('select');
+            select.id = `filter-${key}`;
+            select.innerHTML = '';
+            // Placeholder option
+            const placeholderOption = document.createElement('option');
+            placeholderOption.value = 'all';
+            placeholderOption.textContent = key === 'setting' ? 'All' : label;
+            placeholderOption.disabled = false;
+            placeholderOption.hidden = false;
+            select.appendChild(placeholderOption);
+            uniqueValues.sort().forEach(value => {
+                const option = document.createElement('option');
+                option.value = value;
+                option.textContent = value;
+                select.appendChild(option);
+            });
+            select.value = this.filters[key];
+            select.addEventListener('change', (e) => {
+                this.filters[key] = e.target.value;
+                this.applyFilters();
+            });
+            pill.appendChild(select);
+            filtersGroup.appendChild(pill);
         });
-        
+        this.filtersBar.appendChild(filtersGroup);
+        // Search group
+        const searchGroup = document.createElement('div');
+        searchGroup.className = 'search-group';
+        const searchPill = document.createElement('div');
+        searchPill.className = 'filter-pill';
+        // searchPill.innerHTML = searchSVG;
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.className = 'search-input';
+        searchInput.placeholder = 'Search models and scaffolds...';
+        searchInput.value = this.modelSearch || '';
+        searchInput.addEventListener('input', (e) => {
+            this.modelSearch = e.target.value;
+            this.applyFilters();
+        });
+        searchPill.appendChild(searchInput);
+        // Keyboard shortcut hint
+        const shortcut = document.createElement('span');
+        shortcut.className = 'search-shortcut';
+        shortcut.textContent = '/';
+        searchPill.appendChild(shortcut);
+        searchGroup.appendChild(searchPill);
+        this.filtersBar.appendChild(searchGroup);
+    }
+    
+    applyFilters() {
+        // Instead of hiding rows, we keep all rows and dull non-matching ones
+        this.filteredData = this.originalData.filter(item => {
+            const matchesSetting = (this.filters.setting === 'all' || item.setting === this.filters.setting);
+            const matchesSearch = !this.modelSearch || 
+                item.name.toLowerCase().includes(this.modelSearch.toLowerCase()) ||
+                item.scaffold.toLowerCase().includes(this.modelSearch.toLowerCase());
+            return matchesSetting && matchesSearch;
+        });
         this.updateTable();
+    }
+    
+    sortData(data) {
+        const key = this.sortKey;
+        const dir = this.sortDir;
+        return data.slice().sort((a, b) => {
+            if (key === 'rank') {
+                // rank is just index, so keep order
+                return 0;
+            } else if (key === 'model') {
+                return dir === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+            } else if (key === 'scaffold') {
+                return dir === 'asc' ? a.scaffold.localeCompare(b.scaffold) : b.scaffold.localeCompare(a.scaffold);
+            } else if (key === 'setting') {
+                // Opt@1 > Opt@10 > ...
+                const val = v => v.setting === 'Opt@1' ? 2 : v.setting === 'Opt@10' ? 1 : 0;
+                return dir === 'asc' ? val(a) - val(b) : val(b) - val(a);
+            } else if (key === 'score') {
+                return dir === 'asc' ? a.score - b.score : b.score - a.score;
+            } else if (key === 'date') {
+                return dir === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date);
+            }
+            return 0;
+        });
+    }
+    
+    setSort(key) {
+        if (this.sortKey === key) {
+            this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
+        } else {
+            this.sortKey = key;
+            // Default direction for setting: desc (Opt@1 > Opt@10), for score: desc, for others: asc
+            if (key === 'setting' || key === 'score' || key === 'rank') {
+                this.sortDir = 'desc';
+            } else {
+                this.sortDir = 'asc';
+            }
+        }
+        this.updateTable();
+        this.updateSortIndicators();
+    }
+    
+    updateSortIndicators() {
+        if (!this.headerCells) return;
+        const arrows = { asc: '▲', desc: '▼' };
+        this.headerCells.forEach((th, i) => {
+            th.querySelector('.sort-arrow')?.remove();
+            const colKeys = ['rank', 'model', 'scaffold', 'setting', 'score', 'date'];
+            if (colKeys[i] === this.sortKey) {
+                const arrow = document.createElement('span');
+                arrow.className = 'sort-arrow';
+                arrow.style.marginLeft = '0.4em';
+                arrow.style.fontSize = '0.9em';
+                arrow.textContent = arrows[this.sortDir];
+                th.appendChild(arrow);
+            }
+        });
     }
     
     updateTable() {
         if (!this.tbody) return;
-        
-        // Clear existing rows
         this.tbody.innerHTML = '';
-        
-        // Sort filtered data by score (descending)
-        const sortedModels = this.filteredData.sort((a, b) => b.score - a.score);
-        
-        sortedModels.forEach((model, index) => {
+        // Track selected row index
+        const selectedKey = this.selectedRowKey;
+        // Separate filtered-in and filtered-out rows
+        const filteredIn = this.originalData.filter(model => this.filteredData.includes(model)).sort((a, b) => b.score - a.score);
+        const filteredOut = this.originalData.filter(model => !this.filteredData.includes(model)).sort((a, b) => b.score - a.score);
+        let rank = 1;
+        let rowIndex = 0;
+        // Render filtered-in rows first
+        filteredIn.forEach(model => {
             const row = this.tbody.insertRow();
-            
+            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
+            if (selectedKey && row.dataset.rowKey === selectedKey) {
+                row.classList.add('selected-row');
+            }
+            row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
             // Rank
             const rankCell = row.insertCell();
-            rankCell.textContent = index + 1;
+            rankCell.textContent = rank++;
             rankCell.style.fontWeight = '600';
-            
+            rankCell.style.textAlign = 'center';
             // Model name
             const nameCell = row.insertCell();
             nameCell.textContent = model.name;
             nameCell.className = 'model-name';
-            
             // Scaffold
             const scaffoldCell = row.insertCell();
             scaffoldCell.textContent = model.scaffold;
-            
             // Setting
             const settingCell = row.insertCell();
             settingCell.textContent = model.setting;
             settingCell.className = 'score';
-            
             // Score
             const scoreCell = row.insertCell();
             scoreCell.textContent = model.score.toFixed(1) + '%';
             scoreCell.className = 'score';
-            
             // Date
             const dateCell = row.insertCell();
             dateCell.textContent = new Date(model.date).toLocaleDateString();
+            rowIndex++;
         });
+        // Render filtered-out (dulled) rows below
+        filteredOut.forEach(model => {
+            const row = this.tbody.insertRow();
+            row.classList.add('dull-row');
+            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
+            if (selectedKey && row.dataset.rowKey === selectedKey) {
+                row.classList.add('selected-row');
+            }
+            row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
+            // Rank
+            const rankCell = row.insertCell();
+            rankCell.textContent = rank++;
+            rankCell.style.fontWeight = '600';
+            rankCell.style.textAlign = 'center';
+            // Model name
+            const nameCell = row.insertCell();
+            nameCell.textContent = model.name;
+            nameCell.className = 'model-name';
+            // Scaffold
+            const scaffoldCell = row.insertCell();
+            scaffoldCell.textContent = model.scaffold;
+            // Setting
+            const settingCell = row.insertCell();
+            settingCell.textContent = model.setting;
+            settingCell.className = 'score';
+            // Score
+            const scoreCell = row.insertCell();
+            scoreCell.textContent = model.score.toFixed(1) + '%';
+            scoreCell.className = 'score';
+            // Date
+            const dateCell = row.insertCell();
+            dateCell.textContent = new Date(model.date).toLocaleDateString();
+            rowIndex++;
+        });
+    }
+    
+    handleRowSelect(rowKey) {
+        if (this.selectedRowKey === rowKey) {
+            this.selectedRowKey = null;
+        } else {
+            this.selectedRowKey = rowKey;
+        }
+        this.updateTable();
     }
     
     renderLeaderboard(data) {
         // Create main container
         const container = document.createElement('div');
         container.style.cssText = 'display: flex; flex-direction: column;';
-        
         // Create single table with proper structure
         const table = document.createElement('table');
         table.style.cssText = 'width: 100%; border-collapse: collapse;';
-        
-        // Create header with filters
+        // Create header (no filter dropdowns)
         const header = table.createTHead();
-        
-        // First row: Filter dropdowns in header cells
-        const filterRow = header.insertRow();
+        const headerRow = header.insertRow();
         const headers = ['Rank', 'Model', 'Scaffold', 'Setting', 'Score', 'Date'];
-        const filterKeys = [null, 'model', 'scaffold', 'setting', null, null];
-        
-        headers.forEach((headerText, index) => {
+        headers.forEach(headerText => {
             const th = document.createElement('th');
             th.style.cssText = 'padding: 0.75rem 1rem; background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%); color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
-            
-            // Create header content container
-            const headerContent = document.createElement('div');
-            headerContent.style.cssText = 'display: flex; flex-direction: column; gap: 0.5rem; align-items: flex-start;';
-            
-            // Add header text
-            const headerLabel = document.createElement('div');
-            headerLabel.textContent = headerText;
-            headerLabel.style.cssText = 'font-weight: 700; margin-bottom: 0.25rem;';
-            headerContent.appendChild(headerLabel);
-            
-            // Add filter dropdown if applicable
-            if (filterKeys[index]) {
-                const filterKey = filterKeys[index];
-                const uniqueValues = [...new Set(this.originalData.map(item => filterKey === 'model' ? item.name : item[filterKey]))];
-                
-                const select = document.createElement('select');
-                select.style.cssText = 'padding: 0.25rem 0.5rem; border: 1px solid rgba(255,255,255,0.3); border-radius: 4px; background: rgba(255,255,255,0.1); color: white; font-size: 0.75rem; width: 100%; max-width: 120px;';
-                
-                // Add "All" option
-                const allOption = document.createElement('option');
-                allOption.value = 'all';
-                allOption.textContent = 'All';
-                allOption.style.color = 'black';
-                select.appendChild(allOption);
-                
-                // Add unique values
-                uniqueValues.sort().forEach(value => {
-                    const option = document.createElement('option');
-                    option.value = value;
-                    option.textContent = value;
-                    option.style.color = 'black';
-                    select.appendChild(option);
-                });
-                
-                // Add event listener
-                select.addEventListener('change', (e) => {
-                    this.filters[filterKey] = e.target.value;
-                    this.applyFilters();
-                });
-                
-                // Store reference for model filter
-                if (filterKey === 'model') {
-                    this.modelSelect = select;
-                }
-                
-                headerContent.appendChild(select);
-            }
-            
-            th.appendChild(headerContent);
-            filterRow.appendChild(th);
+            th.textContent = headerText;
+            headerRow.appendChild(th);
         });
-        
         // Create body
         const tbody = table.createTBody();
         this.tbody = tbody;
-        
         // Set initial filtered data
-        this.filteredData = data.models;
-        
-        // Sort models by score (descending)
-        const sortedModels = this.filteredData.sort((a, b) => b.score - a.score);
-        
-        sortedModels.forEach((model, index) => {
-            const row = tbody.insertRow();
-            
-            // Rank
-            const rankCell = row.insertCell();
-            rankCell.textContent = index + 1;
-            rankCell.style.fontWeight = '600';
-            
-            // Model name
-            const nameCell = row.insertCell();
-            nameCell.textContent = model.name;
-            nameCell.className = 'model-name';
-            
-            // Scaffold
-            const scaffoldCell = row.insertCell();
-            scaffoldCell.textContent = model.scaffold;
-            
-            // Setting
-            const settingCell = row.insertCell();
-            settingCell.textContent = model.setting;
-            settingCell.className = 'score';
-            
-            // Score
-            const scoreCell = row.insertCell();
-            scoreCell.textContent = model.score.toFixed(1) + '%';
-            scoreCell.className = 'score';
-            
-            // Date
-            const dateCell = row.insertCell();
-            dateCell.textContent = new Date(model.date).toLocaleDateString();
-        });
-        
+        this.filteredData = this.originalData.filter(item => this.filters.setting === 'all' || item.setting === this.filters.setting);
+        // Initial sort
+        this.updateTable();
         // Create single table wrapper with scrollable body
         const tableWrapper = document.createElement('div');
-        tableWrapper.style.cssText = 'border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); max-height: 600px; overflow-y: auto;';
-        
+        tableWrapper.style.cssText = 'border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color); max-height: 600px; overflow-y: auto;';
         // Add the complete table to wrapper
         tableWrapper.appendChild(table);
         container.appendChild(tableWrapper);
-        
         // Hide loading and show table
         this.loadingElement.style.display = 'none';
         this.tableElement.style.display = 'block';
         this.tableElement.appendChild(container);
-        
         // Add last updated info
         if (data.last_updated) {
             const lastUpdated = document.createElement('div');
