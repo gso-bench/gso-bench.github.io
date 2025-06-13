@@ -136,9 +136,16 @@ class LeaderboardManager {
                 // rank is just index, so keep order
                 return 0;
             } else if (key === 'model') {
-                return dir === 'asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
-            } else if (key === 'scaffold') {
-                return dir === 'asc' ? a.scaffold.localeCompare(b.scaffold) : b.scaffold.localeCompare(a.scaffold);
+                // Sort by model name first, then scaffold
+                const modelCompare = dir === 'asc' ? 
+                    a.name.localeCompare(b.name) : 
+                    b.name.localeCompare(a.name);
+                if (modelCompare === 0) {
+                    return dir === 'asc' ? 
+                        a.scaffold.localeCompare(b.scaffold) : 
+                        b.scaffold.localeCompare(a.scaffold);
+                }
+                return modelCompare;
             } else if (key === 'setting') {
                 // Opt@1 > Opt@10 > ...
                 const val = v => v.setting === 'Opt@1' ? 2 : v.setting === 'Opt@10' ? 1 : 0;
@@ -196,7 +203,8 @@ class LeaderboardManager {
         let rank = 1;
         let rowIndex = 0;
         // Render filtered-in rows first
-        filteredIn.forEach(model => {
+        const medalCount = Math.min(3, filteredIn.length);
+        filteredIn.forEach((model, idx) => {
             const row = this.tbody.insertRow();
             row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
             if (selectedKey && row.dataset.rowKey === selectedKey) {
@@ -205,16 +213,21 @@ class LeaderboardManager {
             row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
             // Rank
             const rankCell = row.insertCell();
-            rankCell.textContent = rank++;
+            if (idx === 0 && medalCount >= 1) {
+                rankCell.innerHTML = '<span class="rank-medal medal-gold">1</span>';
+            } else if (idx === 1 && medalCount >= 2) {
+                rankCell.innerHTML = '<span class="rank-medal medal-silver">2</span>';
+            } else if (idx === 2 && medalCount >= 3) {
+                rankCell.innerHTML = '<span class="rank-medal medal-bronze">3</span>';
+            } else {
+                rankCell.textContent = idx + 1;
+            }
             rankCell.style.fontWeight = '600';
             rankCell.style.textAlign = 'center';
-            // Model name
+            // Model name with scaffold
             const nameCell = row.insertCell();
-            nameCell.textContent = model.name;
+            nameCell.innerHTML = `${model.name} <span class=\"scaffold-tag\">+ ${model.scaffold}</span>`;
             nameCell.className = 'model-name';
-            // Scaffold
-            const scaffoldCell = row.insertCell();
-            scaffoldCell.textContent = model.scaffold;
             // Setting
             const settingCell = row.insertCell();
             settingCell.textContent = model.setting;
@@ -228,11 +241,15 @@ class LeaderboardManager {
             // Parse date as local date to avoid timezone conversion issues
             const dateParts = model.date.split('-');
             const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-            dateCell.textContent = localDate.toLocaleDateString();
+            dateCell.textContent = localDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            // Org
+            const orgCell = row.insertCell();
+            orgCell.className = 'org-cell';
+            orgCell.innerHTML = `<a href="${model.org_url}" target="_blank" rel="noopener" class="org-link"><span class="org-logo-wrap"><img src="${model.org_logo}" alt="${model.org_name} logo" class="org-logo" width="20" height="20"><span class="org-arrow" aria-label="External link">↗</span></span></a>`;
             rowIndex++;
         });
         // Render filtered-out (dulled) rows below
-        filteredOut.forEach(model => {
+        filteredOut.forEach((model, idx) => {
             const row = this.tbody.insertRow();
             row.classList.add('dull-row');
             row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
@@ -240,18 +257,15 @@ class LeaderboardManager {
                 row.classList.add('selected-row');
             }
             row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
-            // Rank
+            // Rank (always plain number for dulled rows)
             const rankCell = row.insertCell();
-            rankCell.textContent = rank++;
+            rankCell.textContent = idx + 1;
             rankCell.style.fontWeight = '600';
             rankCell.style.textAlign = 'center';
-            // Model name
+            // Model name with scaffold
             const nameCell = row.insertCell();
-            nameCell.textContent = model.name;
+            nameCell.innerHTML = `${model.name} <span class=\"scaffold-tag\">+ ${model.scaffold}</span>`;
             nameCell.className = 'model-name';
-            // Scaffold
-            const scaffoldCell = row.insertCell();
-            scaffoldCell.textContent = model.scaffold;
             // Setting
             const settingCell = row.insertCell();
             settingCell.textContent = model.setting;
@@ -265,7 +279,11 @@ class LeaderboardManager {
             // Parse date as local date to avoid timezone conversion issues
             const dateParts = model.date.split('-');
             const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
-            dateCell.textContent = localDate.toLocaleDateString();
+            dateCell.textContent = localDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+            // Org
+            const orgCell = row.insertCell();
+            orgCell.className = 'org-cell';
+            orgCell.innerHTML = `<a href="${model.org_url}" target="_blank" rel="noopener" class="org-link"><span class="org-logo-wrap"><img src="${model.org_logo}" alt="${model.org_name} logo" class="org-logo" width="20" height="20"><span class="org-arrow" aria-label="External link">↗</span></span></a>`;
             rowIndex++;
         });
     }
@@ -289,11 +307,12 @@ class LeaderboardManager {
         // Create header (no filter dropdowns)
         const header = table.createTHead();
         const headerRow = header.insertRow();
-        const headers = ['Rank', 'Model', 'Scaffold', 'Setting', 'Score', 'Date'];
-        headers.forEach(headerText => {
+        const headers = ['Rank', 'Model', 'Setting', 'Score', 'Date', 'Org'];
+        headers.forEach((headerText, i) => {
             const th = document.createElement('th');
-            th.style.cssText = 'padding: 0.75rem 1rem; background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%); color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
+            th.style.cssText = 'padding: 0.75rem 1rem; background: #6b7280; color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
             th.textContent = headerText;
+            if (headerText === 'Org') th.style.textAlign = 'center';
             headerRow.appendChild(th);
         });
         // Create body

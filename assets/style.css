@@ -414,6 +414,12 @@ a:hover {
     padding-right: 0.5rem;
 }
 
+.leaderboard-table th:nth-child(3),
+.leaderboard-table th:nth-child(4),
+.leaderboard-table th:nth-child(5),
+.leaderboard-table th:nth-child(6) {
+    text-align: center;
+}
 
 .leaderboard-table th {
     background: linear-gradient(135deg, #6b7280 0%, #9ca3af 100%);
@@ -430,6 +436,13 @@ a:hover {
 .leaderboard-table td {
     color: var(--text-secondary);
     transition: background-color 0.2s ease;
+}
+
+.leaderboard-table td:nth-child(3),
+.leaderboard-table td:nth-child(4),
+.leaderboard-table td:nth-child(5),
+.leaderboard-table td:nth-child(6) {
+    text-align: center;
 }
 
 .leaderboard-table tr:hover td {
@@ -1193,4 +1206,75 @@ a:focus {
 .leaderboard-footnotes strong {
     color: var(--text-secondary);
     font-weight: 600;
+}
+
+.scaffold-tag {
+    font-weight: normal;
+    margin-left: 0.5em;
+    opacity: 0.8;
+}
+
+.model-name {
+    font-weight: 600;
+}
+
+.rank-medal {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: inherit;
+    margin: 0 0.2em 0 0;
+    vertical-align: middle;
+    box-shadow: none;
+}
+.medal-gold {
+    background: linear-gradient(135deg, #FFC72C 60%, #FFB300 100%);
+    color: #7a4a00;
+}
+.medal-silver {
+    background: linear-gradient(135deg, #d1d5db 60%, #a3aab7 100%);
+    color: #2d3748;
+}
+.medal-bronze {
+    background: linear-gradient(135deg, #ff7c2d 60%, #e65100 100%);
+    color: #7a4a00;
+}
+
+.org-logo-wrap {
+    display: inline-flex;
+    align-items: center;
+    width: 20px;
+    height: 20px;
+}
+.org-arrow {
+    position: static;
+    font-size: 0.95em;
+    color: var(--accent-primary, #3182ce);
+    /* pointer-events: none; */
+    opacity: 0.7;
+    margin-left: 0.18em;
+}
+.org-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 400;
+    color: var(--text-secondary);
+    text-decoration: none;
+    gap: 0.3em;
+    width: 100%;
+}
+.org-link:hover {
+    text-decoration: underline;
+    color: var(--accent-primary);
+}
+.org-cell {
+    white-space: nowrap;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+    text-align: center;
 }
