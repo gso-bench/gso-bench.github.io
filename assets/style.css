@@ -1278,3 +1278,39 @@ a:focus {
     padding-right: 0.2em;
     text-align: center;
 }
+.org-name-text {
+    display: inline-block;
+    font-weight: 600;
+    color: #000;
+    line-height: 1;
+    padding: 0 2px;
+}
+[data-theme="dark"] .org-name-text {
+    color: #fff;
+}
+.org-link .org-name-text + .org-arrow {
+    margin-left: 0;
+}
+
+/* Provider icon next to model name */
+.model-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+}
+.provider-icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+}
+.provider-icon {
+    width: 18px;
+    height: 18px;
+    opacity: 0.9;
+}
+[data-theme="dark"] .provider-icon {
+    filter: invert(1) brightness(1.2);
+    opacity: 0.95;
+}

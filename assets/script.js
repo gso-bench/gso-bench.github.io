@@ -159,6 +159,58 @@ class LeaderboardManager {
         });
     }
     
+    // Provider info for icon/link next to model name.
+    // Prefer explicit model.model_org if provided; otherwise fall back to name heuristic.
+    getProviderInfo(model) {
+        const orgRaw = (model && model.model_org) ? String(model.model_org).toLowerCase() : '';
+        const byOrg = (o) => {
+            switch (o) {
+                case 'openai':
+                    return { providerName: 'OpenAI', providerUrl: 'https://openai.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg' };
+                case 'anthropic':
+                    return { providerName: 'Anthropic', providerUrl: 'https://www.anthropic.com/', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg' };
+                case 'google':
+                    return { providerName: 'Google', providerUrl: 'https://ai.google', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg' };
+                case 'meta':
+                    return { providerName: 'Meta', providerUrl: 'https://ai.meta.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/meta.svg' };
+                case 'mistral':
+                    return { providerName: 'Mistral AI', providerUrl: 'https://mistral.ai', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mistral.svg' };
+                case 'cohere':
+                    return { providerName: 'Cohere', providerUrl: 'https://cohere.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/cohere.svg' };
+                default:
+                    return null;
+            }
+        };
+        let mapped = byOrg(orgRaw);
+        if (mapped) return mapped;
+        // Fallback heuristic by model name
+        const n = (model && model.name ? model.name : '').toLowerCase();
+        if (n.includes('claude')) {
+            return { providerName: 'Anthropic', providerUrl: 'https://www.anthropic.com/', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/anthropic.svg' };
+        }
+        if (n.includes('gpt') || n.startsWith('o3') || n.startsWith('o4')) {
+            return { providerName: 'OpenAI', providerUrl: 'https://openai.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/openai.svg' };
+        }
+        return { providerName: null, providerUrl: null, iconUrl: null };
+    }
+    
+    // Build Org cell content. If logo is missing/empty, fall back to org name text.
+    buildOrgCellHTML(model) {
+        const url = model.submission_org_url || model.org_url || '';
+        const name = model.submission_org_name || model.org_name || 'Org';
+        const logo = model.submission_org_logo || model.org_logo || '';
+        const hasLogo = !!(logo && String(logo).trim());
+        const content = hasLogo
+            ? `<span class="org-logo-wrap"><img src="${logo}" alt="${name} logo" class="org-logo" width="20" height="20"></span>`
+            : `<span class="org-name-text">${name}</span>`;
+        const arrow = url ? `<span class="org-arrow" aria-label="External link">↗</span>` : '';
+        const linkClass = hasLogo ? 'org-link' : 'org-link org-text-link';
+        if (url) {
+            return `<a href="${url}" target="_blank" rel="noopener" class="${linkClass}">${content}${arrow}</a>`;
+        }
+        return `<span class="${linkClass}">${content}</span>`;
+    }
+    
     setSort(key) {
         if (this.sortKey === key) {
             this.sortDir = this.sortDir === 'asc' ? 'desc' : 'asc';
@@ -180,7 +232,7 @@ class LeaderboardManager {
         const arrows = { asc: '▲', desc: '▼' };
         this.headerCells.forEach((th, i) => {
             th.querySelector('.sort-arrow')?.remove();
-            const colKeys = ['rank', 'model', 'scaffold', 'setting', 'score', 'date'];
+            const colKeys = ['rank', 'model', 'setting', 'score', 'date', 'org'];
             if (colKeys[i] === this.sortKey) {
                 const arrow = document.createElement('span');
                 arrow.className = 'sort-arrow';
@@ -224,9 +276,10 @@ class LeaderboardManager {
             }
             rankCell.style.fontWeight = '600';
             rankCell.style.textAlign = 'center';
-            // Model name with scaffold
+            // Model name with provider icon and scaffold
             const nameCell = row.insertCell();
-            nameCell.innerHTML = `${model.name} <span class=\"scaffold-tag\">+ ${model.scaffold}</span>`;
+            const pinfo = this.getProviderInfo(model);
+            nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
             nameCell.className = 'model-name';
             // Setting
             const settingCell = row.insertCell();
@@ -242,10 +295,10 @@ class LeaderboardManager {
             const dateParts = model.date.split('-');
             const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
             dateCell.textContent = localDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            // Org
+            // Org (last)
             const orgCell = row.insertCell();
             orgCell.className = 'org-cell';
-            orgCell.innerHTML = `<a href="${model.org_url}" target="_blank" rel="noopener" class="org-link"><span class="org-logo-wrap"><img src="${model.org_logo}" alt="${model.org_name} logo" class="org-logo" width="20" height="20"><span class="org-arrow" aria-label="External link">↗</span></span></a>`;
+            orgCell.innerHTML = this.buildOrgCellHTML(model);
             rowIndex++;
         });
         // Render filtered-out (dulled) rows below
@@ -262,9 +315,10 @@ class LeaderboardManager {
             rankCell.textContent = idx + 1;
             rankCell.style.fontWeight = '600';
             rankCell.style.textAlign = 'center';
-            // Model name with scaffold
+            // Model name with provider icon and scaffold
             const nameCell = row.insertCell();
-            nameCell.innerHTML = `${model.name} <span class=\"scaffold-tag\">+ ${model.scaffold}</span>`;
+            const pinfo = this.getProviderInfo(model);
+            nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
             nameCell.className = 'model-name';
             // Setting
             const settingCell = row.insertCell();
@@ -280,10 +334,10 @@ class LeaderboardManager {
             const dateParts = model.date.split('-');
             const localDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2]);
             dateCell.textContent = localDate.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-            // Org
+            // Org (last)
             const orgCell = row.insertCell();
             orgCell.className = 'org-cell';
-            orgCell.innerHTML = `<a href="${model.org_url}" target="_blank" rel="noopener" class="org-link"><span class="org-logo-wrap"><img src="${model.org_logo}" alt="${model.org_name} logo" class="org-logo" width="20" height="20"><span class="org-arrow" aria-label="External link">↗</span></span></a>`;
+            orgCell.innerHTML = this.buildOrgCellHTML(model);
             rowIndex++;
         });
     }
@@ -312,9 +366,12 @@ class LeaderboardManager {
             const th = document.createElement('th');
             th.style.cssText = 'padding: 0.75rem 1rem; background: #6b7280; color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
             th.textContent = headerText;
-            if (headerText === 'Org') th.style.textAlign = 'center';
+            if (headerText === 'Setting') th.style.textAlign = 'center';
+            th.dataset.key = ['rank', 'model', 'setting', 'score', 'date', 'org'][i];
             headerRow.appendChild(th);
         });
+        this.headerCells = Array.from(headerRow.cells);
+        this.updateSortIndicators();
         // Create body
         const tbody = table.createTBody();
         this.tbody = tbody;
