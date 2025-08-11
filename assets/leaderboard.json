@@ -1,7 +1,7 @@
 {
   "models": [
     {
-      "name": "GPT-5",
+      "name": "GPT-5 (high)",
       "model_org": "OpenAI",
       "scaffold": "OpenHands",
       "setting": "Opt@1",
