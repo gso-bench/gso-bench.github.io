@@ -1,6 +1,28 @@
 {
   "models": [
     {
+      "name": "GLM-4.5-Air",
+      "model_org": "z.ai",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 2.94,
+      "date": "2025-08-26",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
+      "name": "Kimi-K2-Instruct",
+      "model_org": "moonshotai",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 4.9,
+      "date": "2025-08-26",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "GPT-5 (high)",
       "model_org": "OpenAI",
       "scaffold": "OpenHands",

@@ -1244,6 +1244,24 @@ a:focus {
     color: #7a4a00;
 }
 
+.rank-text {
+    font-weight: 700;
+    background: none !important;
+    border-radius: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline !important;
+}
+.rank-text.medal-gold {
+    color: #FFB300 !important;
+}
+.rank-text.medal-silver {
+    color: #9CA3AF !important;
+}
+.rank-text.medal-bronze {
+    color: #CD7C2F !important;
+}
+
 .org-logo-wrap {
     display: inline-flex;
     align-items: center;

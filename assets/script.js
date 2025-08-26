@@ -128,37 +128,6 @@ class LeaderboardManager {
         this.updateTable();
     }
     
-    sortData(data) {
-        const key = this.sortKey;
-        const dir = this.sortDir;
-        return data.slice().sort((a, b) => {
-            if (key === 'rank') {
-                // rank is just index, so keep order
-                return 0;
-            } else if (key === 'model') {
-                // Sort by model name first, then scaffold
-                const modelCompare = dir === 'asc' ? 
-                    a.name.localeCompare(b.name) : 
-                    b.name.localeCompare(a.name);
-                if (modelCompare === 0) {
-                    return dir === 'asc' ? 
-                        a.scaffold.localeCompare(b.scaffold) : 
-                        b.scaffold.localeCompare(a.scaffold);
-                }
-                return modelCompare;
-            } else if (key === 'setting') {
-                // Opt@1 > Opt@10 > ...
-                const val = v => v.setting === 'Opt@1' ? 2 : v.setting === 'Opt@10' ? 1 : 0;
-                return dir === 'asc' ? val(a) - val(b) : val(b) - val(a);
-            } else if (key === 'score') {
-                return dir === 'asc' ? a.score - b.score : b.score - a.score;
-            } else if (key === 'date') {
-                return dir === 'asc' ? new Date(a.date) - new Date(b.date) : new Date(b.date) - new Date(a.date);
-            }
-            return 0;
-        });
-    }
-    
     // Provider info for icon/link next to model name.
     // Prefer explicit model.model_org if provided; otherwise fall back to name heuristic.
     getProviderInfo(model) {
@@ -173,10 +142,12 @@ class LeaderboardManager {
                     return { providerName: 'Google', providerUrl: 'https://ai.google', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg' };
                 case 'meta':
                     return { providerName: 'Meta', providerUrl: 'https://ai.meta.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/meta.svg' };
-                case 'mistral':
-                    return { providerName: 'Mistral AI', providerUrl: 'https://mistral.ai', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/mistral.svg' };
-                case 'cohere':
-                    return { providerName: 'Cohere', providerUrl: 'https://cohere.com', iconUrl: 'https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/cohere.svg' };
+                case 'z.ai':
+                    return { providerName: 'Z.ai', providerUrl: 'https://z.ai', iconUrl: '/assets/logos/zai.svg' };
+                case 'qwen':
+                    return { providerName: 'Qwen', providerUrl: 'https://qwen.ai', iconUrl: '/assets/logos/qwen.svg' };
+                case 'moonshotai':
+                    return { providerName: 'Moonshot AI', providerUrl: 'https://moonshot.ai', iconUrl: '/assets/logos/moonshot.svg' };
                 default:
                     return null;
             }
@@ -255,7 +226,12 @@ class LeaderboardManager {
         let rank = 1;
         let rowIndex = 0;
         // Render filtered-in rows first
-        const medalCount = Math.min(3, filteredIn.length);
+        // Determine medal cutoffs based on unique scores
+        const uniqueScores = [...new Set(filteredIn.map(m => m.score))].sort((a, b) => b - a);
+        const goldScore = uniqueScores[0];
+        const silverScore = uniqueScores[1];
+        const bronzeScore = uniqueScores[2];
+        
         filteredIn.forEach((model, idx) => {
             const row = this.tbody.insertRow();
             row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
@@ -263,16 +239,19 @@ class LeaderboardManager {
                 row.classList.add('selected-row');
             }
             row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
-            // Rank
+            // Rank - handle ties by assigning same rank to models with same score
             const rankCell = row.insertCell();
-            if (idx === 0 && medalCount >= 1) {
-                rankCell.innerHTML = '<span class="rank-medal medal-gold">1</span>';
-            } else if (idx === 1 && medalCount >= 2) {
-                rankCell.innerHTML = '<span class="rank-medal medal-silver">2</span>';
-            } else if (idx === 2 && medalCount >= 3) {
-                rankCell.innerHTML = '<span class="rank-medal medal-bronze">3</span>';
+            if (idx === 0 || model.score !== filteredIn[idx - 1].score) {
+                rank = idx + 1;
+            }
+            if (model.score === goldScore && goldScore !== undefined) {
+                rankCell.innerHTML = '<span class="rank-text medal-gold">' + rank + '</span>';
+            } else if (model.score === silverScore && silverScore !== undefined && silverScore !== goldScore) {
+                rankCell.innerHTML = '<span class="rank-text medal-silver">' + rank + '</span>';
+            } else if (model.score === bronzeScore && bronzeScore !== undefined && bronzeScore !== goldScore && bronzeScore !== silverScore) {
+                rankCell.innerHTML = '<span class="rank-text medal-bronze">' + rank + '</span>';
             } else {
-                rankCell.textContent = idx + 1;
+                rankCell.textContent = rank;
             }
             rankCell.style.fontWeight = '600';
             rankCell.style.textAlign = 'center';
