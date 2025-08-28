@@ -263,7 +263,6 @@ class LeaderboardManager {
             // Setting
             const settingCell = row.insertCell();
             settingCell.textContent = model.setting;
-            settingCell.className = 'score';
             // Score
             const scoreCell = row.insertCell();
             scoreCell.textContent = model.score.toFixed(1) + '%';
