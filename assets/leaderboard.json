@@ -1,6 +1,17 @@
 {
   "models": [
     {
+      "name": "Qwen3-coder",
+      "model_org": "Qwen",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 4.90,
+      "date": "2025-09-02",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "GLM-4.5-Air",
       "model_org": "z.ai",
       "scaffold": "OpenHands",
