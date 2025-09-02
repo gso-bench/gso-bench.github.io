@@ -1,7 +1,7 @@
 {
   "models": [
     {
-      "name": "Qwen3-coder",
+      "name": "Qwen3-Coder",
       "model_org": "Qwen",
       "scaffold": "OpenHands",
       "setting": "Opt@1",
