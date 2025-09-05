@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSO Leaderboard - Software Optimization Benchmark</title>
-    <meta name="description" content="Complete leaderboard for GSO benchmark showing performance of leading SWE-Agents on software optimization tasks.">
+    <title>GSO Problem Explorer - Software Optimization Tasks</title>
+    <meta name="description" content="Explore optimization tasks from the GSO benchmark dataset.">
     <link rel="stylesheet" href="assets/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,11 +20,9 @@
             </div>
             <div class="nav-links">
                 <a href="index.html#overview">Overview</a>
-                <a href="leaderboard.html" class="active">Leaderboard</a>
-                <a href="problems.html">Problem Explorer</a>
-                <!-- <a href="index.html#dataset">Dataset</a> -->
+                <a href="leaderboard.html">Leaderboard</a>
+                <a href="problems.html" class="active">Problem Explorer</a>
                 <a href="index.html#analysis">Analysis</a>
-                <!-- <a href="index.html#citation">Citation</a> -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <span class="theme-icon"></span>
                 </button>
@@ -35,29 +33,14 @@
     <main>
         <section class="hero">
             <div class="container">
-                <h1 class="hero-title">GSO Leaderboard</h1>
+                <h1 class="hero-title">GSO Problem Explorer</h1>
+                <p class="hero-subtitle">Browse optimization tasks directly from the benchmark dataset.</p>
             </div>
         </section>
 
         <section class="section">
             <div class="container">
-                <div class="leaderboard-container">
-                    <div id="leaderboard-filters" class="leaderboard-filters-bar"></div>
-                    <div class="leaderboard-loading" id="leaderboard-loading">
-                        <div class="spinner"></div>
-                        <span>Loading leaderboard...</span>
-                    </div>
-                    <div class="leaderboard-table" id="leaderboard-table" style="display: none;">
-                        <!-- Leaderboard will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <!-- Footnotes for metrics -->
-                <div class="leaderboard-footnotes">
-                    <p><strong>Opt@1:</strong> Estimator of fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests.</p>
-                    <p><strong>Opt@K:</strong> Estimator of fraction of tasks where at least one attempt among K tries achieves ≥95% human speedup and passes correctness tests. <a href="https://arxiv.org/pdf/2505.23671" target="_blank">See paper for details</a>.</p>
-                    <p>Each entry was added on the specified "Date" with submissions from an "Org".</p>
-                </div>
+                <div id="problems-container" class="problems-container"></div>
             </div>
         </section>
     </main>
@@ -73,21 +56,18 @@
                     <h3>Links</h3>
                     <ul>
                         <li><a href="https://github.com/gso-bench/gso">GitHub Repository</a></li>
-                        <li><a href="https://huggingface.co/datasets/manishs/gso">Dataset</a></li>
+                        <li><a href="https://huggingface.co/datasets/gso-bench/gso">Dataset</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h3>Contact</h3>
                     <p>manishs@berkeley.edu</p>
-                    <p>For questions, please open an issue on GitHub</p>
                 </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 GSO Benchmark. Released under MIT License.</p>
             </div>
         </div>
     </footer>
 
     <script src="assets/script.js"></script>
+    <script src="assets/problem-explorer.js"></script>
 </body>
 </html>

@@ -715,7 +715,9 @@ function initDarkMode() {
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new LeaderboardManager();
+    if (document.getElementById('leaderboard-table')) {
+        new LeaderboardManager();
+    }
     new TabManager();
     new ClipboardManager();
     new NavigationManager();

@@ -1332,3 +1332,46 @@ a:focus {
     filter: invert(1) brightness(1.2);
     opacity: 0.95;
 }
+
+/* Problem Explorer */
+.problems-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.problem-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 2px var(--shadow-light);
+    transition: transform 0.2s ease;
+}
+
+.problem-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px var(--shadow-medium);
+}
+
+.problem-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.problem-card p {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.problem-card details {
+    margin-top: 0.5rem;
+}
+
+.problem-card pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    padding: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.8rem;
+}
