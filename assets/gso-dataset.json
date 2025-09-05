@@ -1,0 +1,36 @@
+[
+  {
+    "instance_id": "acme__benchmark-0001",
+    "repo": "acme/benchmark",
+    "base_commit": "1111111",
+    "opt_commit": "2222222",
+    "prob_script": "benchmarks/test.py",
+    "tests": ["pytest tests/test_perf.py::test_speed"],
+    "setup_commands": ["pip install -r requirements.txt"],
+    "install_commands": ["python setup.py install"],
+    "api": "/api/compute",
+    "hints_text": "Improve the matrix multiplication algorithm.",
+    "created_at": "2024-01-01",
+    "gt_commit_message": "Optimize matmul using numpy dot",
+    "gt_diff": "--- diff here ---",
+    "arch": "x86_64",
+    "instance_image_tag": "latest"
+  },
+  {
+    "instance_id": "acme__benchmark-0002",
+    "repo": "acme/benchmark2",
+    "base_commit": "3333333",
+    "opt_commit": "4444444",
+    "prob_script": "benchmarks/test2.py",
+    "tests": ["pytest tests/test_perf2.py::test_speed"],
+    "setup_commands": ["pip install -r requirements.txt"],
+    "install_commands": ["python setup.py install"],
+    "api": "/api/process",
+    "hints_text": "Cache function results",
+    "created_at": "2024-02-01",
+    "gt_commit_message": "Add caching layer",
+    "gt_diff": "--- diff here ---",
+    "arch": "x86_64",
+    "instance_image_tag": "latest"
+  }
+]

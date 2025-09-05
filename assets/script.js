@@ -577,7 +577,7 @@ class PerformanceMonitor {
         // Log page load performance
         window.addEventListener('load', () => {
             if ('performance' in window) {
-                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                const loadTime = Math.round(performance.now());
                 console.log(`Page loaded in ${loadTime}ms`);
             }
         });

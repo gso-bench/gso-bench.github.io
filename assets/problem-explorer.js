@@ -8,23 +8,40 @@ class ProblemExplorer {
 
     async load() {
         try {
-            const params = new URLSearchParams({
-                dataset: 'gso-bench/gso',
-                config: 'default',
-                split: 'train',
-                offset: '0',
-                length: '100'
+            const tasks = await this.fetchRemote().catch(async err => {
+                console.warn('Remote dataset load failed, using local copy', err);
+                return await this.fetchLocal();
             });
-            const response = await fetch(`https://datasets-server.huggingface.co/rows?${params.toString()}`);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const data = await response.json();
-            const rows = Array.isArray(data?.rows) ? data.rows : [];
-            const tasks = rows.map(r => r.row);
-            this.render(tasks);
+            if (Array.isArray(tasks)) {
+                this.render(tasks);
+            } else {
+                this.container.innerHTML = '<p>No tasks available.</p>';
+            }
         } catch (err) {
             console.error('Failed to load dataset', err);
             this.container.innerHTML = '<p>Failed to load dataset.</p>';
         }
+    }
+
+    async fetchRemote() {
+        const params = new URLSearchParams({
+            dataset: 'gso-bench/gso',
+            config: 'default',
+            split: 'train',
+            offset: '0',
+            length: '100'
+        });
+        const response = await fetch(`https://datasets-server.huggingface.co/rows?${params.toString()}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+        const rows = Array.isArray(data?.rows) ? data.rows : [];
+        return rows.map(r => r.row);
+    }
+
+    async fetchLocal() {
+        const response = await fetch('assets/gso-dataset.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        return await response.json();
     }
 
     render(tasks) {
