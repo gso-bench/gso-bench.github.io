@@ -107,30 +107,81 @@ class ProblemExplorer {
 
     setupSearch() {
         if (!this.filtersBar) return;
+
         const searchGroup = document.createElement('div');
-        searchGroup.className = 'search-group';
+        searchGroup.className = 'search-group problem-search-group';
         const pill = document.createElement('div');
         pill.className = 'filter-pill';
+
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'search-input';
         input.placeholder = 'Jump to problem ID...';
-        input.setAttribute('list', 'task-list');
-        input.addEventListener('change', (e) => {
-            this.jumpToTask(e.target.value.trim());
-        });
+        this.searchInput = input;
         pill.appendChild(input);
         searchGroup.appendChild(pill);
+        // Keyboard shortcut hint
+        const hint = document.createElement('span');
+        hint.className = 'shortcut-hint';
+        hint.textContent = '/';
+        pill.appendChild(hint);
+
+        const suggestions = document.createElement('div');
+        suggestions.className = 'search-suggestions';
+        searchGroup.appendChild(suggestions);
         this.filtersBar.appendChild(searchGroup);
 
-        const datalist = document.createElement('datalist');
-        datalist.id = 'task-list';
-        this.tasks.forEach(t => {
-            const option = document.createElement('option');
-            option.value = t.instance_id;
-            datalist.appendChild(option);
+        const showSuggestions = () => {
+            suggestions.style.display = 'block';
+            pill.style.borderBottomLeftRadius = '0';
+            pill.style.borderBottomRightRadius = '0';
+        };
+        const hideSuggestions = () => {
+            suggestions.style.display = 'none';
+            pill.style.borderBottomLeftRadius = '';
+            pill.style.borderBottomRightRadius = '';
+        };
+
+        input.addEventListener('input', (e) => {
+            const value = e.target.value.trim().toLowerCase();
+            suggestions.innerHTML = '';
+            if (!value) {
+                hideSuggestions();
+                return;
+            }
+            const matches = this.tasks
+                .filter(t => t.instance_id.toLowerCase().includes(value))
+                .slice(0, 10);
+            matches.forEach(t => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.textContent = t.instance_id;
+                item.addEventListener('mousedown', () => {
+                    input.value = t.instance_id;
+                    hideSuggestions();
+                    this.jumpToTask(t.instance_id);
+                });
+                suggestions.appendChild(item);
+            });
+            if (matches.length) {
+                showSuggestions();
+            } else {
+                hideSuggestions();
+            }
         });
-        this.filtersBar.appendChild(datalist);
+
+        input.addEventListener('focus', () => {
+            if (suggestions.childElementCount) showSuggestions();
+        });
+        input.addEventListener('blur', () => {
+            setTimeout(() => hideSuggestions(), 100);
+        });
+        input.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                this.jumpToTask(input.value.trim());
+                hideSuggestions();
+            }
+        });
     }
 
     jumpToTask(id) {
@@ -139,6 +190,16 @@ class ProblemExplorer {
             this.currentIndex = index;
             this.renderTask();
         }
+    }
+
+    sortTasks(by) {
+        if (by === 'repo') {
+            this.tasks.sort((a, b) => a.repo.localeCompare(b.repo));
+        } else if (by === 'date') {
+            this.tasks.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+        }
+        this.currentIndex = 0;
+        this.renderTask();
     }
 }
 

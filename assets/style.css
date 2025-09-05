@@ -1176,6 +1176,63 @@ a:focus {
     width: 100%;
 }
 
+.problem-search-group {
+    flex: 0 1 260px;
+    position: relative;
+}
+
+.leaderboard-filters-bar .sort-button {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+[data-theme="dark"] .leaderboard-filters-bar .sort-button {
+    background: #181a1b;
+    border: 1px solid #333;
+    color: #f5f5f5;
+}
+
+.leaderboard-filters-bar .sort-button.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #fff;
+}
+
+.search-suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+[data-theme="dark"] .search-suggestions {
+    background: #181a1b;
+    border-color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.search-suggestions .suggestion-item {
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+}
+
+.search-suggestions .suggestion-item:hover {
+    background: var(--bg-secondary);
+}
+
 .leaderboard-table tr.dull-row td {
     opacity: 0.45;
     filter: grayscale(0.5);
