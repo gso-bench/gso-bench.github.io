@@ -577,7 +577,7 @@ class PerformanceMonitor {
         // Log page load performance
         window.addEventListener('load', () => {
             if ('performance' in window) {
-                const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                const loadTime = Math.round(performance.now());
                 console.log(`Page loaded in ${loadTime}ms`);
             }
         });
@@ -715,7 +715,9 @@ function initDarkMode() {
 // Initialize all managers when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new LeaderboardManager();
+    if (document.getElementById('leaderboard-table')) {
+        new LeaderboardManager();
+    }
     new TabManager();
     new ClipboardManager();
     new NavigationManager();

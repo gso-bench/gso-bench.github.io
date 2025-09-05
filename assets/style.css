@@ -24,6 +24,9 @@
     --shadow-heavy: rgba(0, 0, 0, 0.15);
     --code-bg: #f6f8fa;
     --code-border: #d1d9e0;
+    --diff-add-bg: #e6ffed;
+    --diff-del-bg: #ffeef0;
+    --diff-hunk-bg: #f0f0f0;
     --success-color: #28a745;
     --warning-color: #ffc107;
     --error-color: #dc3545;
@@ -45,6 +48,9 @@
     --shadow-heavy: rgba(0, 0, 0, 0.7);
     --code-bg: #1e1e1e;
     --code-border: #333333;
+    --diff-add-bg: #033a16;
+    --diff-del-bg: #3c0d0d;
+    --diff-hunk-bg: #2d2d2d;
 }
 
 /* Typography */
@@ -1170,6 +1176,63 @@ a:focus {
     width: 100%;
 }
 
+.problem-search-group {
+    flex: 0 1 260px;
+    position: relative;
+}
+
+.leaderboard-filters-bar .sort-button {
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+[data-theme="dark"] .leaderboard-filters-bar .sort-button {
+    background: #181a1b;
+    border: 1px solid #333;
+    color: #f5f5f5;
+}
+
+.leaderboard-filters-bar .sort-button.active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    color: #fff;
+}
+
+.search-suggestions {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 6px 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+[data-theme="dark"] .search-suggestions {
+    background: #181a1b;
+    border-color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.search-suggestions .suggestion-item {
+    padding: 0.35rem 0.75rem;
+    cursor: pointer;
+}
+
+.search-suggestions .suggestion-item:hover {
+    background: var(--bg-secondary);
+}
+
 .leaderboard-table tr.dull-row td {
     opacity: 0.45;
     filter: grayscale(0.5);
@@ -1331,4 +1394,153 @@ a:focus {
 [data-theme="dark"] .provider-icon {
     filter: invert(1) brightness(1.2);
     opacity: 0.95;
+}
+
+/* Problem Explorer */
+.problems-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.problem-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 1px 2px var(--shadow-light);
+    transition: transform 0.2s ease;
+}
+
+.problem-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 4px var(--shadow-medium);
+}
+
+.problem-card h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.problem-card p {
+    margin-bottom: 0.25rem;
+    font-size: 0.95rem;
+}
+
+.problem-card details {
+    margin-top: 0.5rem;
+}
+
+.problem-card pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    padding: 0.5rem;
+    overflow-x: auto;
+    font-size: 0.8rem;
+}
+
+/* Problem Viewer */
+.problem-viewer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.task-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.task-nav button {
+    padding: 0.5rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.task-nav button:hover:not(:disabled) {
+    background-color: var(--bg-tertiary);
+}
+
+.task-nav button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.commit-header {
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.commit-header .commit-message {
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    white-space: pre-wrap;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.commit-header .commit-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    align-items: center;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.commit-header .commit-meta a {
+    color: var(--accent-primary);
+    text-decoration: none;
+}
+
+.commit-header .commit-meta .commit-hash a {
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Consolas, 'Liberation Mono', Menlo, monospace;
+}
+
+.commit-header .commit-meta .instance-id {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.diff-viewer {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    padding: 0.5rem;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, SF Mono, Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    white-space: pre-wrap;
+    margin: 2rem;
+}
+
+.diff-add,
+.diff-del,
+.diff-hunk {
+    display: block;
+    padding: 0 0.5rem;
+}
+
+.diff-add {
+    /* background: var(--diff-add-bg); */
+    color: var(--success-color);
+}
+
+.diff-del {
+    /* background: var(--diff-del-bg); */
+    color: var(--error-color);
+}
+
+.diff-hunk {
+    /* background: var(--diff-hunk-bg); */
+    color: var(--text-secondary);
 }
