@@ -8,10 +8,18 @@ class ProblemExplorer {
 
     async load() {
         try {
-            const url = 'https://datasets-server.huggingface.co/rows?dataset=gso-bench%2Fgso&config=default&split=train&limit=100';
-            const response = await fetch(url);
+            const params = new URLSearchParams({
+                dataset: 'gso-bench/gso',
+                config: 'default',
+                split: 'train',
+                offset: '0',
+                length: '100'
+            });
+            const response = await fetch(`https://datasets-server.huggingface.co/rows?${params.toString()}`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
             const data = await response.json();
-            const tasks = data.rows.map(r => r.row);
+            const rows = Array.isArray(data?.rows) ? data.rows : [];
+            const tasks = rows.map(r => r.row);
             this.render(tasks);
         } catch (err) {
             console.error('Failed to load dataset', err);
