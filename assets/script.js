@@ -11,6 +11,7 @@ class LeaderboardManager {
             scaffold: 'all',
             setting: 'Opt@1' // default to Opt@1
         };
+        this.showRewardHackControl = false; // Track reward hacking control toggle
         this.selectedRowKey = null;
         this.modelSearch = '';
         this.init();
@@ -25,10 +26,7 @@ class LeaderboardManager {
         }
     }
     
-    async loadLeaderboard() {
-        // Simulate loading delay for better UX
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
+    async loadLeaderboard() {        
         try {
             const response = await fetch('assets/leaderboard.json');
             const data = await response.json();
@@ -91,6 +89,28 @@ class LeaderboardManager {
             filtersGroup.appendChild(pill);
         });
         this.filtersBar.appendChild(filtersGroup);
+        
+        // Reward hacking control toggle
+        const rewardHackToggle = document.createElement('div');
+        rewardHackToggle.className = 'reward-hack-toggle';
+        rewardHackToggle.innerHTML = `
+            <button id="reward-hack-toggle" class="reward-hack-button ${this.showRewardHackControl ? 'active' : ''}" 
+                    title="Toggle reward hacking control scores">
+                <span class="toggle-icon">🛡️ </span>
+                <span class="toggle-label"> Hack Detector </span>
+            </button>
+        `;
+        this.filtersBar.appendChild(rewardHackToggle);
+        
+        // Add event listener for the toggle
+        const toggleButton = document.getElementById('reward-hack-toggle');
+        toggleButton.addEventListener('click', () => {
+            this.showRewardHackControl = !this.showRewardHackControl;
+            toggleButton.classList.toggle('active', this.showRewardHackControl);
+            this.updateTableHeader();
+            this.updateTable();
+        });
+        
         // Search group
         const searchGroup = document.createElement('div');
         searchGroup.className = 'search-group';
@@ -215,19 +235,33 @@ class LeaderboardManager {
         });
     }
     
+    updateTableHeader() {
+        if (!this.headerCells || this.headerCells.length < 4) return;
+        const scoreHeader = this.headerCells[3];
+        scoreHeader.textContent = this.showRewardHackControl ? 'Score + Δ' : 'Score';
+    }
+    
     updateTable() {
         if (!this.tbody) return;
         this.tbody.innerHTML = '';
         // Track selected row index
         const selectedKey = this.selectedRowKey;
         // Separate filtered-in and filtered-out rows
-        const filteredIn = this.originalData.filter(model => this.filteredData.includes(model)).sort((a, b) => b.score - a.score);
-        const filteredOut = this.originalData.filter(model => !this.filteredData.includes(model)).sort((a, b) => b.score - a.score);
+        const filteredIn = this.originalData.filter(model => this.filteredData.includes(model)).sort((a, b) => {
+            const scoreA = this.showRewardHackControl ? a.score_hack_control : a.score;
+            const scoreB = this.showRewardHackControl ? b.score_hack_control : b.score;
+            return scoreB - scoreA;
+        });
+        const filteredOut = this.originalData.filter(model => !this.filteredData.includes(model)).sort((a, b) => {
+            const scoreA = this.showRewardHackControl ? a.score_hack_control : a.score;
+            const scoreB = this.showRewardHackControl ? b.score_hack_control : b.score;
+            return scoreB - scoreA;
+        });
         let rank = 1;
         let rowIndex = 0;
         // Render filtered-in rows first
         // Determine medal cutoffs based on unique scores
-        const uniqueScores = [...new Set(filteredIn.map(m => m.score))].sort((a, b) => b - a);
+        const uniqueScores = [...new Set(filteredIn.map(m => this.showRewardHackControl ? m.score_hack_control : m.score))].sort((a, b) => b - a);
         const goldScore = uniqueScores[0];
         const silverScore = uniqueScores[1];
         const bronzeScore = uniqueScores[2];
@@ -241,14 +275,16 @@ class LeaderboardManager {
             row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
             // Rank - handle ties by assigning same rank to models with same score
             const rankCell = row.insertCell();
-            if (idx === 0 || model.score !== filteredIn[idx - 1].score) {
+            const currentScore = this.showRewardHackControl ? model.score_hack_control : model.score;
+            const prevScore = idx > 0 ? (this.showRewardHackControl ? filteredIn[idx - 1].score_hack_control : filteredIn[idx - 1].score) : null;
+            if (idx === 0 || currentScore !== prevScore) {
                 rank = idx + 1;
             }
-            if (model.score === goldScore && goldScore !== undefined) {
+            if (currentScore === goldScore && goldScore !== undefined) {
                 rankCell.innerHTML = '<span class="rank-text medal-gold">' + rank + '</span>';
-            } else if (model.score === silverScore && silverScore !== undefined && silverScore !== goldScore) {
+            } else if (currentScore === silverScore && silverScore !== undefined && silverScore !== goldScore) {
                 rankCell.innerHTML = '<span class="rank-text medal-silver">' + rank + '</span>';
-            } else if (model.score === bronzeScore && bronzeScore !== undefined && bronzeScore !== goldScore && bronzeScore !== silverScore) {
+            } else if (currentScore === bronzeScore && bronzeScore !== undefined && bronzeScore !== goldScore && bronzeScore !== silverScore) {
                 rankCell.innerHTML = '<span class="rank-text medal-bronze">' + rank + '</span>';
             } else {
                 rankCell.textContent = rank;
@@ -265,8 +301,21 @@ class LeaderboardManager {
             settingCell.textContent = model.setting;
             // Score
             const scoreCell = row.insertCell();
-            scoreCell.textContent = model.score.toFixed(1) + '%';
-            scoreCell.className = 'score';
+            if (this.showRewardHackControl) {
+                // Show reward hack control score as main score
+                // Only display delta when negative (penalty). Hide zero or positive deltas.
+                const delta = model.score_hack_control - model.score;
+                const showDelta = delta < 0;
+                const deltaHTML = showDelta
+                    ? ` <span class="delta-change delta-negative">${delta.toFixed(1)}%</span>`
+                    : '';
+                scoreCell.innerHTML = `${model.score_hack_control.toFixed(1)}%${deltaHTML}`;
+                scoreCell.className = 'score';
+                scoreCell.title = `Regular: ${model.score.toFixed(1)}% → Control: ${model.score_hack_control.toFixed(1)}%`;
+            } else {
+                scoreCell.textContent = model.score.toFixed(1) + '%';
+                scoreCell.className = 'score';
+            }
             // Date
             const dateCell = row.insertCell();
             // Parse date as local date to avoid timezone conversion issues
@@ -304,8 +353,21 @@ class LeaderboardManager {
             settingCell.className = 'score';
             // Score
             const scoreCell = row.insertCell();
-            scoreCell.textContent = model.score.toFixed(1) + '%';
-            scoreCell.className = 'score';
+            if (this.showRewardHackControl) {
+                // Show reward hack control score as main score
+                // Only display delta when negative (penalty). Hide zero or positive deltas.
+                const delta = model.score_hack_control - model.score;
+                const showDelta = delta < 0;
+                const deltaHTML = showDelta
+                    ? ` <span class=\"delta-change delta-negative\">${delta.toFixed(1)}%</span>`
+                    : '';
+                scoreCell.innerHTML = `${model.score_hack_control.toFixed(1)}%${deltaHTML}`;
+                scoreCell.className = 'score';
+                scoreCell.title = `Regular: ${model.score.toFixed(1)}% → Control: ${model.score_hack_control.toFixed(1)}%`;
+            } else {
+                scoreCell.textContent = model.score.toFixed(1) + '%';
+                scoreCell.className = 'score';
+            }
             // Date
             const dateCell = row.insertCell();
             // Parse date as local date to avoid timezone conversion issues
@@ -339,7 +401,7 @@ class LeaderboardManager {
         // Create header (no filter dropdowns)
         const header = table.createTHead();
         const headerRow = header.insertRow();
-        const headers = ['Rank', 'Model', 'Setting', 'Score', 'Date', 'Org'];
+        const headers = ['Rank', 'Model', 'Setting', this.showRewardHackControl ? 'Score + Δ' : 'Score', 'Date', 'Org'];
         headers.forEach((headerText, i) => {
             const th = document.createElement('th');
             th.style.cssText = 'padding: 0.75rem 1rem; background: #6b7280; color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
@@ -717,6 +779,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
     if (document.getElementById('leaderboard-table')) {
         new LeaderboardManager();
+    }
+    if (document.getElementById('opt1-threshold-plot')) {
+        new Opt1ThresholdPlotManager();
     }
     new TabManager();
     new ClipboardManager();

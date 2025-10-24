@@ -1072,7 +1072,6 @@ html {
 }
 
 /* Focus styles for accessibility */
-button:focus,
 a:focus {
     outline: 2px solid var(--accent-primary);
     outline-offset: 2px;
@@ -1174,6 +1173,106 @@ a:focus {
 .leaderboard-filters-bar .search-group .search-input {
     flex: 1 1 0;
     width: 100%;
+}
+
+/* Reward Hack Control Toggle */
+.reward-hack-toggle {
+    display: flex;
+    align-items: center;
+}
+
+.reward-hack-button {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+    padding: 0.1rem 0.75rem 0.1rem 0.5rem;
+    min-width: 120px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 400;
+}
+
+[data-theme="dark"] .reward-hack-button {
+    background: #181a1b;
+    border: 1px solid #333;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    color: #f5f5f5;
+}
+
+.reward-hack-button:hover {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+.reward-hack-button.active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+    box-shadow: 0 1px 4px rgba(220, 38, 38, 0.3);
+}
+
+.reward-hack-button.active:hover {
+    background: #b91c1c;
+    border-color: #b91c1c;
+}
+
+.toggle-icon {
+    font-size: 0.87em;
+    color: #b0b4ba;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    margin-right: 0.3rem;
+}
+
+[data-theme="dark"] .toggle-icon {
+    color: #6c6f75;
+}
+
+.toggle-label {
+    white-space: nowrap;
+}
+
+/* Delta Change Styling - Like Stock Indicators */
+.delta-change {
+    font-weight: 700;
+    border-radius: 3px;
+    padding: 0.1rem 0.3rem;
+    margin-left: 0.5rem;
+    font-size: 0.85em;
+    border: 1px solid;
+    position: relative;
+}
+
+.delta-positive {
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    color: #16a34a;
+    border-color: #bbf7d0;
+}
+
+.delta-negative {
+    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+[data-theme="dark"] .delta-positive {
+    background: linear-gradient(135deg, #0f1b0f 0%, #1a2e1a 100%);
+    color: #4ade80;
+    border-color: #166534;
+}
+
+[data-theme="dark"] .delta-negative {
+    background: linear-gradient(135deg, #3c0d0d 0%, #2d0a0a 100%);
+    color: #fca5a5;
+    border-color: #7f1d1d;
 }
 
 .problem-search-group {
@@ -1437,6 +1536,46 @@ a:focus {
     padding: 0.5rem;
     overflow-x: auto;
     font-size: 0.8rem;
+}
+
+/* Plot Section */
+.plot-section {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border-color);
+}
+
+.plot-section h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.plot-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+    background: var(--bg-primary);
+    padding: 0rem 2rem 0rem 2rem;
+}
+
+.plot-container canvas {
+    background: transparent;
+    max-width: 100%;
+    height: 500px;
+    border-radius: 4px;
+}
+
+.plot-caption {
+    text-align: center;
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
 }
 
 /* Problem Viewer */
