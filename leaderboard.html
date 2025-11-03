@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -21,9 +22,9 @@
             <div class="nav-links">
                 <a href="index.html#overview">Overview</a>
                 <a href="leaderboard.html" class="active">Leaderboard</a>
-                <a href="problems.html">Tasks</a>
+                <a href="problems.html">Problems</a>
                 <!-- <a href="index.html#dataset">Dataset</a> -->
-                <a href="index.html#analysis">Analysis</a>
+                <!-- <a href="index.html#analysis">Analysis</a> -->
                 <!-- <a href="index.html#citation">Citation</a> -->
                 <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
                     <span class="theme-icon"></span>
@@ -56,7 +57,28 @@
                 <div class="leaderboard-footnotes">
                     <p><strong>Opt@1:</strong> Estimator of fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests.</p>
                     <p><strong>Opt@K:</strong> Estimator of fraction of tasks where at least one attempt among K tries achieves ≥95% human speedup and passes correctness tests. <a href="https://arxiv.org/pdf/2505.23671" target="_blank">See paper for details</a>.</p>
-                    <p>Each entry was added on the specified "Date" with submissions from an "Org".</p>
+                    <p><strong><span class="delta-negative">&nbsp;NEW&nbsp;</span>  Hack-Adjusted:</strong> 
+                        We observe that top models can perform deceptive optimizations (e.g., memoization, caching inputs, etc.).
+                        To tackle this we introduce a new "Hack Detector" system that penalizes reward hacks by comparing the model's patch with the oracle solution and the test cases.
+                        The "Hack-Adjusted" column shows the adjusted score after penalizing detected hacks, with the delta change displayed when penalties are applied.
+                    </p>
+                </div>
+
+                <!-- Opt@1 vs Speedup Threshold Plot -->
+                <div class="plot-section">
+                    <h2 style="text-align: left;">Opt@1 vs Speedup Threshold (p)</h2>
+                    <div>
+                        <p>
+                            <strong>Opt<sub>p</sub>@1:</strong> Estimate of fraction of tasks where a single attempt achieves ≥p% human speedup and passes correctness tests.
+                        </p>
+                        <p>
+                            p=0.95 is our default threshold, but it can be a knob for difficulty for a task; i.e., p=0 evaluates if the agent's patch is correct, regardless of performance, 
+                            while p=1 evaluates if the agent's patch is identical/better in performance to the human commit.
+                        </p>
+                    </div>
+                    <div class="plot-container">
+                        <canvas id="opt1-threshold-plot"></canvas>
+                    </div>
                 </div>
             </div>
         </section>
@@ -89,5 +111,6 @@
     </footer>
 
     <script src="assets/script.js"></script>
+    <script src="assets/opt1-plot.js"></script>
 </body>
 </html>
