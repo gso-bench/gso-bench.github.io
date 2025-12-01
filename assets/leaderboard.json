@@ -1,6 +1,30 @@
 {
   "models": [
     {
+      "name": "Claude-4.5-Opus",
+      "model_org": "Anthropic",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 26.47,
+      "score_hack_control": 24.50,
+      "date": "2025-11-28",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
+      "name": "Gemini-3-Pro",
+      "model_org": "Google",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 18.63,
+      "score_hack_control": 17.65,
+      "date": "2025-11-28",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "Gemini-2.5-Pro",
       "model_org": "Google",
       "scaffold": "OpenHands",

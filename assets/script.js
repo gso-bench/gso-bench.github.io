@@ -11,7 +11,8 @@ class LeaderboardManager {
             scaffold: 'all',
             setting: 'Opt@1' // default to Opt@1
         };
-        this.selectedRowKey = null;
+        this.selectedRowKeys = new Set();
+        this.lastClickedRowKey = null;
         this.modelSearch = '';
         this.init();
     }
@@ -123,7 +124,18 @@ class LeaderboardManager {
                 item.scaffold.toLowerCase().includes(this.modelSearch.toLowerCase());
             return matchesSetting && matchesSearch;
         });
+        this.updateScoreHeaders();
         this.updateTable();
+    }
+    
+    updateScoreHeaders() {
+        if (!this.scoreHeaderCell) return;
+        const setting = this.filters.setting;
+        if (setting === 'all') {
+            this.scoreHeaderCell.textContent = 'Score';
+        } else {
+            this.scoreHeaderCell.textContent = `${setting} Score`;
+        }
     }
     
     // Provider info for icon/link next to model name.
@@ -216,8 +228,8 @@ class LeaderboardManager {
     updateTable() {
         if (!this.tbody) return;
         this.tbody.innerHTML = '';
-        // Track selected row index
-        const selectedKey = this.selectedRowKey;
+        // Track selected rows
+        const selectedKeys = this.selectedRowKeys;
         // Separate filtered-in and filtered-out rows
         const filteredIn = this.originalData.filter(model => this.filteredData.includes(model)).sort((a, b) => {
             return b.score - a.score;
@@ -237,10 +249,10 @@ class LeaderboardManager {
         filteredIn.forEach((model, idx) => {
             const row = this.tbody.insertRow();
             row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
-            if (selectedKey && row.dataset.rowKey === selectedKey) {
+            if (selectedKeys.has(row.dataset.rowKey)) {
                 row.classList.add('selected-row');
             }
-            row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
+            row.addEventListener('click', (e) => this.handleRowSelect(row.dataset.rowKey, e));
             // Rank - handle ties by assigning same rank to models with same score
             const rankCell = row.insertCell();
             const currentScore = model.score;
@@ -264,9 +276,6 @@ class LeaderboardManager {
             const pinfo = this.getProviderInfo(model);
             nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
             nameCell.className = 'model-name';
-            // Setting
-            const settingCell = row.insertCell();
-            settingCell.textContent = model.setting;
             // Score
             const scoreCell = row.insertCell();
             scoreCell.textContent = model.score.toFixed(1) + '%';
@@ -294,10 +303,10 @@ class LeaderboardManager {
             const row = this.tbody.insertRow();
             row.classList.add('dull-row');
             row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
-            if (selectedKey && row.dataset.rowKey === selectedKey) {
+            if (selectedKeys.has(row.dataset.rowKey)) {
                 row.classList.add('selected-row');
             }
-            row.addEventListener('click', () => this.handleRowSelect(row.dataset.rowKey));
+            row.addEventListener('click', (e) => this.handleRowSelect(row.dataset.rowKey, e));
             // Rank (always plain number for dulled rows)
             const rankCell = row.insertCell();
             rankCell.textContent = idx + 1;
@@ -308,9 +317,6 @@ class LeaderboardManager {
             const pinfo = this.getProviderInfo(model);
             nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
             nameCell.className = 'model-name';
-            // Setting
-            const settingCell = row.insertCell();
-            settingCell.textContent = model.setting;
             // Score
             const scoreCell = row.insertCell();
             scoreCell.textContent = model.score.toFixed(1) + '%';
@@ -335,12 +341,30 @@ class LeaderboardManager {
         });
     }
     
-    handleRowSelect(rowKey) {
-        if (this.selectedRowKey === rowKey) {
-            this.selectedRowKey = null;
+    handleRowSelect(rowKey, event) {
+        if (event && event.shiftKey && this.lastClickedRowKey) {
+            // Shift+click: select range between last clicked and current
+            const allRows = Array.from(this.tbody.rows);
+            const rowKeys = allRows.map(r => r.dataset.rowKey);
+            const lastIndex = rowKeys.indexOf(this.lastClickedRowKey);
+            const currentIndex = rowKeys.indexOf(rowKey);
+            
+            if (lastIndex !== -1 && currentIndex !== -1) {
+                const start = Math.min(lastIndex, currentIndex);
+                const end = Math.max(lastIndex, currentIndex);
+                for (let i = start; i <= end; i++) {
+                    this.selectedRowKeys.add(rowKeys[i]);
+                }
+            }
         } else {
-            this.selectedRowKey = rowKey;
+            // Regular click: toggle selection
+            if (this.selectedRowKeys.has(rowKey)) {
+                this.selectedRowKeys.delete(rowKey);
+            } else {
+                this.selectedRowKeys.add(rowKey);
+            }
         }
+        this.lastClickedRowKey = rowKey;
         this.updateTable();
     }
     
@@ -354,16 +378,18 @@ class LeaderboardManager {
         // Create header (no filter dropdowns)
         const header = table.createTHead();
         const headerRow = header.insertRow();
-        const headers = ['Rank', 'Model', 'Setting', 'Score', 'Hack-Adjusted', 'Date'];
+        const headers = ['Rank', 'Model', 'Score', 'Hack-Adjusted', 'Date'];
+        const headerKeys = ['rank', 'model', 'score', 'hack_score', 'date'];
         headers.forEach((headerText, i) => {
             const th = document.createElement('th');
-            th.style.cssText = 'padding: 0.75rem 1rem; background: #6b7280; color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; vertical-align: top;';
+            th.style.cssText = 'padding: 0.75rem 1rem; background: #6b7280; color: white; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px; text-transform: uppercase; position: sticky; top: 0; z-index: 10; white-space: nowrap;';
             th.textContent = headerText;
-            if (headerText === 'Setting') th.style.textAlign = 'center';
-            th.dataset.key = ['rank', 'model', 'setting', 'score', 'hack_score', 'date'][i];
+            th.dataset.key = headerKeys[i];
             headerRow.appendChild(th);
         });
         this.headerCells = Array.from(headerRow.cells);
+        this.scoreHeaderCell = this.headerCells[2];
+        this.updateScoreHeaders();
         this.updateSortIndicators();
         // Create body
         const tbody = table.createTBody();
@@ -385,7 +411,7 @@ class LeaderboardManager {
         // Add last updated info
         if (data.last_updated) {
             const lastUpdated = document.createElement('div');
-            lastUpdated.style.cssText = 'text-align: center; margin-top: 1rem; color: var(--text-tertiary); font-size: 0.875rem;';
+            lastUpdated.style.cssText = 'text-align: center; margin-top: 0.5rem; color: var(--text-tertiary); font-size: 0.875rem;';
             lastUpdated.textContent = `Last updated: ${new Date(data.last_updated).toLocaleDateString()}`;
             this.tableElement.appendChild(lastUpdated);
         }
