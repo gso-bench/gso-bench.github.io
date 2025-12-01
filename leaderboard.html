@@ -55,12 +55,12 @@
                 
                 <!-- Footnotes for metrics -->
                 <div class="leaderboard-footnotes">
-                    <p><strong>Opt@1:</strong> Estimator of fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests.</p>
-                    <p><strong>Opt@K:</strong> Estimator of fraction of tasks where at least one attempt among K tries achieves ≥95% human speedup and passes correctness tests. <a href="https://arxiv.org/pdf/2505.23671" target="_blank">See paper for details</a>.</p>
+                    <p><strong>Opt@1:</strong> Estimator of fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests. <a href="https://arxiv.org/pdf/2505.23671" target="_blank">See paper for details</a>.</p>
                     <p><strong><span class="delta-negative">&nbsp;NEW&nbsp;</span>  Hack-Adjusted:</strong> 
-                        We observe that top models can perform deceptive optimizations (e.g., memoization, caching inputs, etc.).
+                        We observe that top models can perform deceptive optimizations (e.g., memoization, harness hijacking, etc.).
                         To tackle this we introduce a new "Hack Detector" system that penalizes reward hacks by comparing the model's patch with the oracle solution and the test cases.
-                        The "Hack-Adjusted" column shows the adjusted score after penalizing detected hacks, with the delta change displayed when penalties are applied.
+                        The "Hack-Adjusted" column shows the adjusted score after penalizing detected hacks.
+                        <a href="https://gso-blog.notion.site/gso-hackdetector" target="_blank">Learn more</a>.
                     </p>
                 </div>
 

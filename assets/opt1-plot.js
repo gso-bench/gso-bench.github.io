@@ -11,7 +11,23 @@ class Opt1ThresholdPlotManager {
             '#9467bd', // Purple
             '#8c564b', // Brown
             '#e377c2', // Pink
-            '#7f7f7f'  // Gray
+            '#7f7f7f', // Gray
+            '#bcbd22', // Yellow-green
+            '#17becf', // Cyan
+            '#ff1493', // Deep Pink
+            '#00ced1', // Dark Turquoise
+            '#ff6347', // Tomato
+            '#4169e1', // Royal Blue
+            '#32cd32', // Lime Green
+            '#ff8c00', // Dark Orange
+            '#9932cc', // Dark Orchid
+            '#20b2aa', // Light Sea Green
+            '#dc143c', // Crimson
+            '#00bfff', // Deep Sky Blue
+            '#adff2f', // Green Yellow
+            '#ff69b4', // Hot Pink
+            '#1e90ff', // Dodger Blue
+            '#ffa500'  // Orange
         ];
         this.init();
     }
@@ -88,6 +104,29 @@ class Opt1ThresholdPlotManager {
                 };
             }
         };
+        
+        // Add custom plugin to draw vertical line at x=0.95
+        const verticalLinePlugin = {
+            id: 'verticalLine',
+            afterDraw(chart) {
+                const ctx = chart.ctx;
+                const xScale = chart.scales.x;
+                const yScale = chart.scales.y;
+                
+                const xValue = 0.95;
+                const xPixel = xScale.getPixelForValue(xValue);
+                
+                ctx.save();
+                ctx.strokeStyle = '#666666';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                ctx.moveTo(xPixel, yScale.top);
+                ctx.lineTo(xPixel, yScale.bottom);
+                ctx.stroke();
+                ctx.restore();
+            }
+        };
 
         // Chart configuration
         const config = {
@@ -95,7 +134,7 @@ class Opt1ThresholdPlotManager {
             data: {
                 datasets: datasets
             },
-            plugins: [legendSpacingPlugin],
+            plugins: [legendSpacingPlugin, verticalLinePlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -112,7 +151,7 @@ class Opt1ThresholdPlotManager {
                             color: textColor,
                             font: {
                                 family: 'Inter, sans-serif',
-                                size: 12
+                                size: 10
                             },
                             padding: 15,
                             boxWidth: 12
