@@ -282,14 +282,8 @@ class LeaderboardManager {
             scoreCell.className = 'score';
             // Hack Detected Score
             const hackScoreCell = row.insertCell();
-            const delta = model.score_hack_control - model.score;
-            const showDelta = delta < 0;
-            const deltaHTML = showDelta
-                ? ` <span class="delta-change delta-negative">${delta.toFixed(1)}%</span>`
-                : '';
-            hackScoreCell.innerHTML = `${model.score_hack_control.toFixed(1)}%${deltaHTML}`;
+            hackScoreCell.textContent = model.score_hack_control.toFixed(1) + '%';
             hackScoreCell.className = 'score';
-            hackScoreCell.title = `Regular: ${model.score.toFixed(1)}% → Hack Control: ${model.score_hack_control.toFixed(1)}%`;
             // Date
             const dateCell = row.insertCell();
             // Parse date as local date to avoid timezone conversion issues
@@ -323,14 +317,8 @@ class LeaderboardManager {
             scoreCell.className = 'score';
             // Hack Detected Score
             const hackScoreCell = row.insertCell();
-            const delta = model.score_hack_control - model.score;
-            const showDelta = delta < 0;
-            const deltaHTML = showDelta
-                ? ` <span class="delta-change delta-negative">${delta.toFixed(1)}%</span>`
-                : '';
-            hackScoreCell.innerHTML = `${model.score_hack_control.toFixed(1)}%${deltaHTML}`;
+            hackScoreCell.textContent = model.score_hack_control.toFixed(1) + '%';
             hackScoreCell.className = 'score';
-            hackScoreCell.title = `Regular: ${model.score.toFixed(1)}% → Hack Control: ${model.score_hack_control.toFixed(1)}%`;
             // Date
             const dateCell = row.insertCell();
             // Parse date as local date to avoid timezone conversion issues
