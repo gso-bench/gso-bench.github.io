@@ -1,6 +1,30 @@
 {
   "models": [
     {
+      "name": "GPT-5.2 (high)",
+      "model_org": "OpenAI",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 27.45,
+      "score_hack_control": 26.47,
+      "date": "2025-12-18",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
+      "name": "GPT-5.1 (high)",
+      "model_org": "OpenAI",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 13.73,
+      "score_hack_control": 12.75,
+      "date": "2025-12-18",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "Claude-4.5-Opus",
       "model_org": "Anthropic",
       "scaffold": "OpenHands",
