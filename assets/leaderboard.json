@@ -1,6 +1,18 @@
 {
   "models": [
     {
+      "name": "Gemini-3-Flash",
+      "model_org": "Google",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 9.8,
+      "score_hack_control": 7.84,
+      "date": "2025-12-19",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "GPT-5.2 (high)",
       "model_org": "OpenAI",
       "scaffold": "OpenHands",
