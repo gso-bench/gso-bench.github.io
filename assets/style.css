@@ -953,22 +953,22 @@ a:hover {
 }
 
 @media (max-width: 480px) {
-    .nav-links a:not(.theme-toggle) {
+    .nav-hide-mobile {
         display: none;
     }
-    
+
     .hero-title {
         font-size: 1.75rem;
     }
-    
+
     .stats-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .tab-buttons {
         flex-wrap: wrap;
     }
-    
+
     .tab-button {
         flex: 1 1 50%;
         min-width: 150px;
