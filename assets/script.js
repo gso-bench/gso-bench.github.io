@@ -388,10 +388,20 @@ class LeaderboardManager {
         this.updateTable();
         // Create single table wrapper with scrollable body
         const tableWrapper = document.createElement('div');
-        tableWrapper.style.cssText = 'border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color); max-height: 600px; overflow-y: auto;';
+        tableWrapper.className = 'leaderboard-table-wrapper';
+        tableWrapper.style.cssText = 'border-radius: 5px; overflow: hidden; border: 1px solid var(--border-color); max-height: 600px; overflow-y: auto; overflow-x: auto;';
         // Add the complete table to wrapper
         tableWrapper.appendChild(table);
         container.appendChild(tableWrapper);
+
+        // Add scroll event listener for mobile scroll indicator
+        tableWrapper.addEventListener('scroll', () => {
+            const container = this.tableElement.closest('.leaderboard-container');
+            if (container) {
+                const isScrolledRight = tableWrapper.scrollLeft + tableWrapper.clientWidth >= tableWrapper.scrollWidth - 5;
+                container.classList.toggle('scrolled-right', isScrolledRight);
+            }
+        });
         // Hide loading and show table
         this.loadingElement.style.display = 'none';
         this.tableElement.style.display = 'block';

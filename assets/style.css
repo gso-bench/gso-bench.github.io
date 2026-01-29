@@ -345,7 +345,30 @@ a:hover {
 .leaderboard-container {
     margin-bottom: 2rem;
     position: relative;
-    overflow: hidden;
+}
+
+.leaderboard-table-wrapper {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Scroll indicator for mobile */
+@media (max-width: 768px) {
+    .leaderboard-container::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 20px;
+        background: linear-gradient(to right, transparent, var(--bg-primary));
+        pointer-events: none;
+        opacity: 0.8;
+        z-index: 5;
+    }
+
+    .leaderboard-container.scrolled-right::after {
+        opacity: 0;
+    }
 }
 
 .leaderboard-table {
@@ -874,82 +897,248 @@ a:hover {
     .container {
         padding: 0 1rem;
     }
-    
+
     .nav-container {
         padding: 0 1rem;
     }
-    
+
     .nav-links {
         gap: 1rem;
     }
-    
+
     .nav-links a {
         font-size: 0.875rem;
     }
-    
+
     .hero {
-        padding: 6rem 0 4rem;
+        padding: 2rem 0 1.5rem;
     }
-    
+
     .hero-title {
         font-size: 2rem;
     }
-    
+
     .hero-subtitle {
         font-size: 1.125rem;
     }
-    
+
     .hero-actions {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .overview-grid {
         grid-template-columns: 1fr;
         gap: 2rem;
     }
-    
+
     .overview-text p {
         text-align: left;
     }
-    
+
     .stats-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 1rem;
     }
-    
+
     .analysis-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .installation-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .tab-buttons {
         flex-direction: column;
     }
-    
+
     .example-header-info {
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
     }
-    
+
     .example-meta {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.5rem;
     }
-    
+
     .footer-content {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
+
     h1 { font-size: 2rem; }
     h2 { font-size: 1.75rem; }
     h3 { font-size: 1.25rem; }
+
+    /* Leaderboard mobile styles */
+    .leaderboard-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .leaderboard-filters-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+    }
+
+    .leaderboard-filters-bar .filters-group {
+        width: 100%;
+    }
+
+    .leaderboard-filters-bar .search-group {
+        width: 100%;
+    }
+
+    .leaderboard-filters-bar .filter-pill {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .leaderboard-table {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .leaderboard-table table {
+        min-width: 500px;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 0.5rem 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .leaderboard-table th {
+        font-size: 0.7rem;
+        letter-spacing: 0.3px;
+        padding: 0.5rem 0.5rem;
+        white-space: nowrap;
+    }
+
+    .leaderboard-table .model-name {
+        font-size: 0.85rem;
+        white-space: nowrap;
+    }
+
+    .leaderboard-table td {
+        white-space: nowrap;
+    }
+
+    .scaffold-tag {
+        display: none;
+    }
+
+    /* Hide date column on mobile */
+    .leaderboard-table th:nth-child(5),
+    .leaderboard-table td:nth-child(5) {
+        display: none;
+    }
+
+    /* Plot section mobile */
+    .plot-section {
+        margin: 2rem 0;
+        padding: 1rem 0;
+    }
+
+    .plot-section h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .plot-container {
+        padding: 0 0.5rem;
+    }
+
+    .plot-container canvas {
+        height: 400px !important;
+    }
+
+    /* Footnotes mobile */
+    .leaderboard-footnotes {
+        padding: 0.5rem 0;
+    }
+
+    .leaderboard-footnotes p {
+        font-size: 0.75rem;
+        line-height: 1.5;
+    }
+
+    .delta-change {
+        display: inline-block;
+        margin-left: 0.25rem;
+        font-size: 0.75em;
+    }
+
+    /* Dataset and analysis sections mobile */
+    .dataset-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .dataset-text,
+    .dataset-figure {
+        padding: 0;
+    }
+
+    .analysis-item-horizontal {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .analysis-text,
+    .analysis-figure {
+        padding: 0;
+    }
+
+    .scaling-layout {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .scaling-matrices .analysis-figure {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Problem explorer mobile */
+    .task-nav {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .task-nav button {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .commit-header .commit-meta {
+        flex-direction: column;
+        gap: 0.5rem;
+        align-items: flex-start;
+        font-size: 0.85rem;
+    }
+
+    .commit-header .commit-message {
+        font-size: 0.75rem;
+        max-height: 100px;
+    }
+
+    .diff-viewer {
+        font-size: 0.6rem;
+        margin: 1rem 0;
+        padding: 0.5rem;
+    }
+
+    .problem-search-group {
+        flex: 1 1 100%;
+        width: 100%;
+    }
 }
 
 @media (max-width: 480px) {
@@ -972,6 +1161,54 @@ a:hover {
     .tab-button {
         flex: 1 1 50%;
         min-width: 150px;
+    }
+
+    /* Even smaller table on very small screens */
+    .leaderboard-table table {
+        min-width: 450px;
+    }
+
+    .leaderboard-table th,
+    .leaderboard-table td {
+        padding: 0.4rem 0.35rem;
+        font-size: 0.8rem;
+    }
+
+    .leaderboard-table th {
+        font-size: 0.65rem;
+        padding: 0.4rem 0.4rem;
+    }
+
+    .model-cell {
+        gap: 0.3em;
+    }
+
+    .provider-icon-wrap {
+        width: 14px;
+        height: 14px;
+    }
+
+    .provider-icon {
+        width: 14px;
+        height: 14px;
+    }
+
+    .plot-container canvas {
+        height: 350px !important;
+    }
+
+    /* Problem explorer very small screens */
+    .diff-viewer {
+        font-size: 0.55rem;
+        line-height: 1.2;
+    }
+
+    .commit-header .commit-meta {
+        font-size: 0.8rem;
+    }
+
+    .task-counter {
+        font-size: 0.85rem;
     }
 }
 
