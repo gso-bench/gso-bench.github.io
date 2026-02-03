@@ -227,6 +227,169 @@ a:hover {
     flex-wrap: wrap;
 }
 
+/* Minimal Hero - Clean Landing */
+.hero-minimal {
+    padding: 4rem 0 3rem;
+    text-align: center;
+}
+
+.hero-title-main {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.hero-tagline {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 400;
+}
+
+.hero-meta {
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+.hero-meta a {
+    color: var(--text-secondary);
+}
+
+.hero-meta a:hover {
+    color: var(--accent-primary);
+}
+
+/* Hero Overview Section */
+.hero-overview {
+    max-width: 800px;
+    margin: 1.5rem auto 2rem;
+    text-align: center;
+}
+
+.hero-overview p {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+    margin-bottom: 1.25rem;
+    font-weight: 300;
+}
+
+
+/* Clean Section */
+.section-clean {
+    padding: 3rem 0;
+}
+
+
+/* Page titles */
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+}
+
+.page-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+/* Leaderboard header */
+.leaderboard-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.leaderboard-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+/* Active nav link */
+.nav-links a.active {
+    color: var(--text-primary);
+    font-weight: 600;
+}
+
+/* Minimal footer */
+.footer-minimal {
+    padding: 2rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    margin-top: 3rem;
+}
+
+.footer-minimal p {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    margin: 0;
+}
+
+.footer-minimal a {
+    color: var(--text-secondary);
+}
+
+.footer-minimal a:hover {
+    color: var(--text-primary);
+}
+
+/* Mobile responsive for new landing */
+@media (max-width: 768px) {
+    .hero-minimal {
+        padding: 3rem 0 2rem;
+    }
+    
+    .hero-title-main {
+        font-size: 2.5rem;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+    }
+    
+    .hero-overview {
+        margin: 1rem auto 1.5rem;
+    }
+    
+    .hero-overview {
+        padding: 0 1rem;
+    }
+    
+    .hero-overview p {
+        font-size: 0.8rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .leaderboard-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-title-main {
+        font-size: 2rem;
+    }
+    
+    .hero-tagline {
+        font-size: 1rem;
+    }
+}
+
 /* Buttons */
 .btn {
     display: inline-flex;
@@ -271,8 +434,8 @@ a:hover {
 /* Section Headers - Consistent Styling */
 .section h2 {
     text-align: left;
-    margin-bottom: 2rem;
-    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
 
@@ -282,9 +445,9 @@ a:hover {
 }
 
 .overview-content p {
-    font-size: 1.125rem;
+    font-size: 1rem;
     line-height: 1.7;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
     text-align: left;
 }
 
@@ -981,22 +1144,7 @@ a:hover {
     }
 
     .leaderboard-filters-bar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 0.75rem;
-    }
-
-    .leaderboard-filters-bar .filters-group {
-        width: 100%;
-    }
-
-    .leaderboard-filters-bar .search-group {
-        width: 100%;
-    }
-
-    .leaderboard-filters-bar .filter-pill {
-        width: 100%;
-        min-width: unset;
+        display: none;
     }
 
     .leaderboard-table {
@@ -1047,8 +1195,12 @@ a:hover {
     }
 
     .plot-section h2 {
-        font-size: 1.5rem;
-        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .plot-section > div > p {
+        font-size: 0.8rem;
     }
 
     .plot-container {
@@ -1341,6 +1493,12 @@ a:focus {
     border-radius: 6px;
     font-size: 1rem;
 }
+
+@media (max-width: 768px) {
+    .leaderboard-filters-bar {
+        display: none !important;
+    }
+}
 .leaderboard-filters-bar .filters-group {
     display: flex;
     align-items: center;
@@ -1354,8 +1512,8 @@ a:focus {
     border: 1px solid var(--border-color);
     border-radius: 6px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-    padding: 0.1rem 0.75rem 0.1rem 0.5rem;
-    min-width: 120px;
+    padding: 0.15rem 0.75rem 0.15rem 0.5rem;
+    min-width: 140px;
     position: relative;
     gap: 0.5rem;
 }
@@ -1403,8 +1561,14 @@ a:focus {
 
 .leaderboard-filters-bar .search-group .filter-pill {
     flex: 1 1 0;
-    min-width: 0;
+    min-width: 200px;
     width: 100%;
+}
+
+@media (max-width: 768px) {
+    .leaderboard-filters-bar .search-group .filter-pill {
+        min-width: 0;
+    }
 }
 
 .leaderboard-filters-bar .search-group .search-input {
@@ -1783,11 +1947,18 @@ a:focus {
 }
 
 .plot-section h2 {
-    text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
+    text-align: left;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.plot-section > div > p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
 }
 
 .plot-container {

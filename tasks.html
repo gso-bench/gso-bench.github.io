@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSO Tasks - Browse Optimization Problems</title>
+    <meta name="description" content="Browse optimization tasks from the GSO benchmark dataset.">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <h1>GSO</h1>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="overview.html">Overview</a>
+                <a href="tasks.html" class="active">Tasks</a>
+                <a href="https://gso-blog.notion.site/" target="_blank" rel="noopener noreferrer" class="nav-hide-mobile">Blog</a>
+                <a href="https://github.com/gso-bench/gso" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://arxiv.org/pdf/2505.23671" target="_blank" rel="noopener noreferrer" class="nav-hide-mobile">Paper</a>
+                <a href="https://huggingface.co/datasets/gso-bench/gso" target="_blank" rel="noopener noreferrer" class="nav-hide-mobile">Dataset</a>
+                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
+                    <span class="theme-icon"></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="section-clean">
+            <div class="container">
+                <h1 class="page-title">Tasks</h1>
+                <p class="page-subtitle">Browse optimization tasks from the benchmark dataset.</p>
+                
+                <div id="problem-filters" class="leaderboard-filters-bar"></div>
+                <div id="problem-viewer" class="problem-viewer"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer-minimal">
+        <div class="container">
+            <p>GSO Benchmark · <a href="mailto:manishs@berkeley.edu">Contact</a> · <a href="https://github.com/gso-bench/gso">GitHub</a></p>
+        </div>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script src="assets/problem-explorer.js"></script>
+</body>
+</html>

@@ -3,114 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GSO Leaderboard - Software Optimization Benchmark</title>
-    <meta name="description" content="Complete leaderboard for GSO benchmark showing performance of leading SWE-Agents on software optimization tasks.">
-    <link rel="stylesheet" href="assets/style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>GSO Leaderboard - Redirecting...</title>
+    <meta http-equiv="refresh" content="0; url=index.html">
+    <link rel="canonical" href="index.html">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-brand">
-                <a href="index.html" style="text-decoration: none; color: inherit;">
-                    <h1>GSO</h1>
-                </a>
-            </div>
-            <div class="nav-links">
-                <a href="leaderboard.html" class="active">Leaderboard</a>
-                <a href="problems.html" class="nav-hide-mobile">Problems</a>
-                <a href="https://gso-blog.notion.site/" target="_blank" rel="noopener noreferrer" class="nav-hide-mobile">Blog</a>
-                <!-- <a href="index.html#dataset">Dataset</a> -->
-                <!-- <a href="index.html#analysis">Analysis</a> -->
-                <!-- <a href="index.html#citation">Citation</a> -->
-                <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark mode">
-                    <span class="theme-icon"></span>
-                </button>
-            </div>
-        </div>
-    </nav>
-
-    <main>
-        <section class="hero">
-            <div class="container">
-                <h1 class="hero-title">GSO Leaderboard</h1>
-            </div>
-        </section>
-
-        <section class="section">
-            <div class="container">
-                <div class="leaderboard-container">
-                    <div id="leaderboard-filters" class="leaderboard-filters-bar"></div>
-                    <div class="leaderboard-loading" id="leaderboard-loading">
-                        <div class="spinner"></div>
-                        <span>Loading leaderboard...</span>
-                    </div>
-                    <div class="leaderboard-table" id="leaderboard-table" style="display: none;">
-                        <!-- Leaderboard will be populated by JavaScript -->
-                    </div>
-                </div>
-                
-                <!-- Footnotes for metrics -->
-                <div class="leaderboard-footnotes">
-                    <p><strong>Opt@1:</strong> Estimator of fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests. <a href="https://arxiv.org/pdf/2505.23671" target="_blank">See paper for details</a>.</p>
-                    <p><strong><span class="delta-negative">&nbsp;NEW&nbsp;</span>  Hack-Adjusted:</strong> 
-                        We observe that top models can perform deceptive optimizations (e.g., memoization, harness hijacking, etc.).
-                        To tackle this we introduce a new "Hack Detector" system that penalizes reward hacks by comparing the model's patch with the oracle solution and the test cases.
-                        The "Hack-Adjusted" column shows the adjusted score after penalizing detected hacks.
-                        <a href="https://gso-blog.notion.site/gso-hackdetector" target="_blank">Learn more</a>.
-                    </p>
-                </div>
-
-                <!-- Opt@1 vs Speedup Threshold Plot -->
-                <div class="plot-section">
-                    <h2 style="text-align: left;">Opt@1 vs Speedup Threshold (p)</h2>
-                    <div>
-                        <p>
-                            <strong>Opt<sub>p</sub>@1:</strong> Estimate of fraction of tasks where a single attempt achieves ≥p% human speedup and passes correctness tests.
-                        </p>
-                        <p>
-                            p=0.95 is our default threshold, but it can be a knob for difficulty for a task; i.e., p=0 evaluates if the agent's patch is correct, regardless of performance, 
-                            while p=1 evaluates if the agent's patch is identical/better in performance to the human commit.
-                        </p>
-                    </div>
-                    <div class="plot-container">
-                        <canvas id="opt1-threshold-plot"></canvas>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>GSO Benchmark</h3>
-                    <p>Challenging Software Optimization Tasks for Evaluating SWE-Agents</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Links</h3>
-                    <ul>
-                        <li><a href="https://github.com/gso-bench/gso">GitHub Repository</a></li>
-                        <li><a href="https://huggingface.co/datasets/manishs/gso">Dataset</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact</h3>
-                    <p>manishs@berkeley.edu</p>
-                    <p>For questions, please open an issue on GitHub</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2024 GSO Benchmark. Released under MIT License.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="assets/script.js"></script>
-    <script src="assets/opt1-plot.js"></script>
+    <p>Redirecting to <a href="index.html">GSO Leaderboard</a>...</p>
+    <script>window.location.replace('index.html');</script>
 </body>
 </html>
