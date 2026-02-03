@@ -55,6 +55,67 @@
                             <path d="M1 8a.5.5 0 0 1 .5-.5h10.793L9.146 4.354a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L12.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                         </svg>
                     </a>
+                    <a href="#leaderboard" class="btn btn-secondary">
+                        <span>Leaderboard</span>
+                        <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M1 8a.5.5 0 0 1 .5-.5h10.793L9.146 4.354a.5.5 0 1 1 .708-.708l4.5 4.5a.5.5 0 0 1 0 .708l-4.5 4.5a.5.5 0 0 1-.708-.708L12.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="at-a-glance" class="section section-alt">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <h2>At a Glance</h2>
+                        <p class="section-subtitle">A quick snapshot of the scale and scope of the GSO benchmark.</p>
+                    </div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <p class="stat-kicker">Optimization Tasks</p>
+                        <p class="stat-value">102 real-world tasks</p>
+                        <p class="stat-detail">Generated from repository histories and validated for diversity.</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-kicker">Codebase Coverage</p>
+                        <p class="stat-value">10 codebases · 8 domains</p>
+                        <p class="stat-detail">Spanning data systems, ML tooling, graphics, and more.</p>
+                    </div>
+                    <div class="stat-card">
+                        <p class="stat-kicker">Language Mix</p>
+                        <p class="stat-value">5 languages</p>
+                        <p class="stat-detail">~60% of tasks require non-Python edits.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="leaderboard" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <div>
+                        <h2>Leaderboard</h2>
+                        <p class="section-subtitle">Latest Opt@1 results, with filters and search. Scroll to explore the full table.</p>
+                    </div>
+                    <div class="section-actions">
+                        <a href="leaderboard.html" class="btn btn-secondary">View full leaderboard</a>
+                    </div>
+                </div>
+                <div class="leaderboard-container leaderboard-preview">
+                    <div id="leaderboard-filters" class="leaderboard-filters-bar"></div>
+                    <div class="leaderboard-loading" id="leaderboard-loading">
+                        <div class="spinner"></div>
+                        <span>Loading leaderboard...</span>
+                    </div>
+                    <div class="leaderboard-table" id="leaderboard-table" style="display: none;">
+                        <!-- Leaderboard will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="leaderboard-footnotes">
+                    <p><strong>Opt@1:</strong> Fraction of tasks where a single attempt achieves ≥95% human speedup and passes correctness tests.</p>
                 </div>
             </div>
         </section>
