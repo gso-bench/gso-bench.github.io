@@ -234,10 +234,16 @@ a:hover {
 }
 
 .hero-title-main {
-    font-size: 4rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1rem;
     letter-spacing: -0.02em;
+}
+
+.hero-authors {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
 }
 
 .hero-tagline {
@@ -351,7 +357,11 @@ a:hover {
     }
     
     .hero-title-main {
-        font-size: 2.5rem;
+        font-size: 1.75rem;
+    }
+    
+    .hero-authors {
+        font-size: 0.85rem;
     }
     
     .hero-tagline {
@@ -382,7 +392,11 @@ a:hover {
 
 @media (max-width: 480px) {
     .hero-title-main {
-        font-size: 2rem;
+        font-size: 1.5rem;
+    }
+    
+    .hero-authors {
+        font-size: 0.8rem;
     }
     
     .hero-tagline {
