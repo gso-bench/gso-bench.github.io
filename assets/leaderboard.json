@@ -1,6 +1,18 @@
 {
   "models": [
     {
+      "name": "Claude-4.6-Opus",
+      "model_org": "Anthropic",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 33.33,
+      "score_hack_control": 30.39,
+      "date": "2026-02-11",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "Gemini-3-Flash",
       "model_org": "Google",
       "scaffold": "OpenHands",

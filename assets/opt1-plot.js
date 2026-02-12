@@ -240,7 +240,7 @@ class Opt1ThresholdPlotManager {
                             lineWidth: 1
                         },
                         min: 0,
-                        max: 80
+                        max: 90
                     }
                 }
             }
