@@ -1,6 +1,18 @@
 {
   "models": [
     {
+      "name": "Gemini-3.1-Pro",
+      "model_org": "Google",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 22.55,
+      "score_hack_control": 21.57,
+      "date": "2026-03-09",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "Claude-4.6-Opus",
       "model_org": "Anthropic",
       "scaffold": "OpenHands",
