@@ -760,6 +760,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (document.getElementById('opt1-threshold-plot')) {
         new Opt1ThresholdPlotManager();
     }
+    if (document.getElementById('compute-metrics-plot')) {
+        new ComputeMetricsPlotManager();
+    }
     new TabManager();
     new ClipboardManager();
     new NavigationManager();

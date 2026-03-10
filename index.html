@@ -102,6 +102,21 @@
                         <canvas id="opt1-threshold-plot"></canvas>
                     </div>
                 </div>
+
+                <!-- Compute Metrics Plot -->
+                <div class="plot-section">
+                    <h2 style="text-align: left;">Compute Profile</h2>
+                    <div>
+                        <p>
+                            Median agent wall-clock time and turns per task, sorted by Opt@1 score.
+                            Time measures how long the agent spent working (not the optimization runtime), from first to last event in each trajectory.
+                        </p>
+                    </div>
+                    <div id="compute-plot-controls" class="compute-plot-controls"></div>
+                    <div class="plot-container">
+                        <canvas id="compute-metrics-plot"></canvas>
+                    </div>
+                </div>
             </div>
         </section>
     </main>
@@ -114,5 +129,6 @@
 
     <script src="assets/script.js"></script>
     <script src="assets/opt1-plot.js"></script>
+    <script src="assets/compute-plot.js"></script>
 </body>
 </html>
