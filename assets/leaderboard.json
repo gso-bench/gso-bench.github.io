@@ -1,6 +1,30 @@
 {
   "models": [
     {
+      "name": "GPT-5.4 (xhigh)",
+      "model_org": "OpenAI",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 31.37,
+      "score_hack_control": 30.39,
+      "date": "2026-03-10",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
+      "name": "GPT-5.4 (high)",
+      "model_org": "OpenAI",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 25.49,
+      "score_hack_control": 22.55,
+      "date": "2026-03-10",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO"
+    },
+    {
       "name": "Gemini-3.1-Pro",
       "model_org": "Google",
       "scaffold": "OpenHands",
@@ -278,7 +302,7 @@
     }
   ],
   "metadata": {
-    "last_updated": "2024-12-15",
+    "last_updated": "2026-03-10",
     "total_tasks": 102
   }
 }

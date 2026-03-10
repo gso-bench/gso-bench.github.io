@@ -11,23 +11,16 @@ class Opt1ThresholdPlotManager {
             '#9467bd', // Purple
             '#8c564b', // Brown
             '#e377c2', // Pink
-            '#7f7f7f', // Gray
-            '#bcbd22', // Yellow-green
             '#17becf', // Cyan
+            '#bcbd22', // Yellow-green
             '#ff1493', // Deep Pink
-            '#00ced1', // Dark Turquoise
-            '#ff6347', // Tomato
+            '#00838f', // Teal
+            '#c62828', // Dark Red
             '#4169e1', // Royal Blue
-            '#32cd32', // Lime Green
             '#ff8c00', // Dark Orange
-            '#9932cc', // Dark Orchid
-            '#20b2aa', // Light Sea Green
-            '#dc143c', // Crimson
+            '#2e7d32', // Dark Green
+            '#6a1b9a', // Deep Purple
             '#00bfff', // Deep Sky Blue
-            '#adff2f', // Green Yellow
-            '#ff69b4', // Hot Pink
-            '#1e90ff', // Dodger Blue
-            '#ffa500'  // Orange
         ];
         this.init();
     }
@@ -76,8 +69,14 @@ class Opt1ThresholdPlotManager {
         const textColor = getComputedStyle(rootEl).getPropertyValue('--text-primary').trim();
         const gridColor = getComputedStyle(rootEl).getPropertyValue('--border-color').trim();
         
-        // Prepare datasets
-        const datasets = Object.entries(this.data).map(([model, points], index) => ({
+        // Prepare datasets, sorted by score at p=0.95 (descending)
+        const entries = Object.entries(this.data);
+        entries.sort((a, b) => {
+            const scoreA = (a[1].find(p => p.threshold === 0.95) || {}).mean || 0;
+            const scoreB = (b[1].find(p => p.threshold === 0.95) || {}).mean || 0;
+            return scoreB - scoreA;
+        });
+        const datasets = entries.map(([model, points], index) => ({
             label: model,
             data: points.map(point => ({
                 x: point.threshold,
@@ -240,7 +239,7 @@ class Opt1ThresholdPlotManager {
                             lineWidth: 1
                         },
                         min: 0,
-                        max: 90
+                        max: 100
                     }
                 }
             }
