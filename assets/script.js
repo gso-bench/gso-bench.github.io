@@ -176,6 +176,24 @@ class LeaderboardManager {
     }
     
     // Build Org cell content. If logo is missing/empty, fall back to org name text.
+    renderModelCell(model, pinfo) {
+        const icon = pinfo.iconUrl
+            ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>`
+            : '';
+        const effortLabels = { high: 'High', xhigh: 'xHigh', low: 'Low', medium: 'Medium', max: 'Max' };
+        const effortKey = (model.reasoning_effort || '').toLowerCase();
+        const effortPill = effortLabels[effortKey]
+            ? `<span class="effort-pill">${effortLabels[effortKey]}</span>`
+            : '';
+        const scaffold = (model.scaffold && model.scaffold !== 'OpenHands')
+            ? `<span class="scaffold-tag">+ ${model.scaffold}</span>`
+            : '';
+        return `<span class="model-cell">`
+            + `${icon}`
+            + `<span class="model-name-group"><span class="model-title">${model.name}</span>${effortPill}${scaffold}</span>`
+            + `</span>`;
+    }
+
     buildOrgCellHTML(model) {
         const url = model.submission_org_url || model.org_url || '';
         const name = model.submission_org_name || model.org_name || 'Org';
@@ -248,7 +266,7 @@ class LeaderboardManager {
         
         filteredIn.forEach((model, idx) => {
             const row = this.tbody.insertRow();
-            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
+            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold + '|' + (model.reasoning_effort || '');
             if (selectedKeys.has(row.dataset.rowKey)) {
                 row.classList.add('selected-row');
             }
@@ -274,7 +292,7 @@ class LeaderboardManager {
             // Model name with provider icon and scaffold
             const nameCell = row.insertCell();
             const pinfo = this.getProviderInfo(model);
-            nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
+            nameCell.innerHTML = this.renderModelCell(model, pinfo);
             nameCell.className = 'model-name';
             // Score
             const scoreCell = row.insertCell();
@@ -296,7 +314,7 @@ class LeaderboardManager {
         filteredOut.forEach((model, idx) => {
             const row = this.tbody.insertRow();
             row.classList.add('dull-row');
-            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold;
+            row.dataset.rowKey = model.name + '|' + model.setting + '|' + model.scaffold + '|' + (model.reasoning_effort || '');
             if (selectedKeys.has(row.dataset.rowKey)) {
                 row.classList.add('selected-row');
             }
@@ -309,7 +327,7 @@ class LeaderboardManager {
             // Model name with provider icon and scaffold
             const nameCell = row.insertCell();
             const pinfo = this.getProviderInfo(model);
-            nameCell.innerHTML = `<span class="model-cell">${pinfo.iconUrl ? `<a href="${pinfo.providerUrl}" target="_blank" rel="noopener" class="provider-icon-wrap"><img src="${pinfo.iconUrl}" alt="${pinfo.providerName} logo" class="provider-icon" width="18" height="18"></a>` : ''}<span class="model-title">${model.name}</span> <span class="scaffold-tag">+ ${model.scaffold}</span></span>`;
+            nameCell.innerHTML = this.renderModelCell(model, pinfo);
             nameCell.className = 'model-name';
             // Score
             const scoreCell = row.insertCell();

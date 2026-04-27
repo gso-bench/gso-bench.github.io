@@ -76,6 +76,9 @@ class Opt1ThresholdPlotManager {
             const scoreB = (b[1].find(p => p.threshold === 0.95) || {}).mean || 0;
             return scoreB - scoreA;
         });
+        // Show top N by p=0.95 score by default; older/lower models are
+        // hidden but still toggleable via the legend.
+        const DEFAULT_VISIBLE = 10;
         const datasets = entries.map(([model, points], index) => ({
             label: model,
             data: points.map(point => ({
@@ -88,19 +91,37 @@ class Opt1ThresholdPlotManager {
             pointRadius: 3,
             pointHoverRadius: 6,
             fill: false,
-            tension: 0.1
+            tension: 0.1,
+            hidden: index >= DEFAULT_VISIBLE
         }));
         
-        // Add custom plugin to add space between legend and chart area
-        const legendSpacingPlugin = {
-            id: 'legendSpacing',
-            beforeInit(chart) {
-                const originalFit = chart.legend && chart.legend.fit ? chart.legend.fit : null;
-                if (!originalFit) return;
-                chart.legend.fit = function fit() {
-                    originalFit.call(this);
-                    this.height += 24;
-                };
+        // Custom HTML legend plugin — flex-wrap centered, click to toggle
+        const htmlLegendPlugin = {
+            id: 'htmlLegend',
+            afterUpdate(chart, _args, options) {
+                const container = document.getElementById(options.containerID);
+                if (!container) return;
+                container.innerHTML = '';
+                const items = chart.options.plugins.legend.labels.generateLabels(chart);
+                items.forEach((item) => {
+                    const li = document.createElement('span');
+                    li.className = 'plot-legend-item' + (item.hidden ? ' is-hidden' : '');
+                    li.style.setProperty('--swatch-color', item.fillStyle);
+                    li.onclick = () => {
+                        const meta = chart.getDatasetMeta(item.datasetIndex);
+                        meta.hidden = meta.hidden === null ? !chart.data.datasets[item.datasetIndex].hidden : null;
+                        chart.update();
+                    };
+                    const swatch = document.createElement('span');
+                    swatch.className = 'plot-legend-swatch';
+                    swatch.style.background = item.fillStyle;
+                    const label = document.createElement('span');
+                    label.className = 'plot-legend-label';
+                    label.textContent = item.text;
+                    li.appendChild(swatch);
+                    li.appendChild(label);
+                    container.appendChild(li);
+                });
             }
         };
         
@@ -133,7 +154,7 @@ class Opt1ThresholdPlotManager {
             data: {
                 datasets: datasets
             },
-            plugins: [legendSpacingPlugin, verticalLinePlugin],
+            plugins: [htmlLegendPlugin, verticalLinePlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -144,17 +165,10 @@ class Opt1ThresholdPlotManager {
                 },
                 plugins: {
                     legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: textColor,
-                            font: {
-                                family: 'Inter, sans-serif',
-                                size: 10
-                            },
-                            padding: 15,
-                            boxWidth: 12
-                        }
+                        display: false
+                    },
+                    htmlLegend: {
+                        containerID: 'opt1-threshold-legend'
                     },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.9)',

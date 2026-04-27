@@ -1780,6 +1780,10 @@ a:focus {
     margin-bottom: 0;
 }
 
+.leaderboard-footnotes .changelog-heading {
+    margin-top: 0.85rem;
+}
+
 .leaderboard-footnotes strong {
     color: var(--text-secondary);
     font-weight: 600;
@@ -1793,6 +1797,42 @@ a:focus {
 
 .model-name {
     font-weight: 600;
+}
+
+.model-cell {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+    line-height: 1.25;
+}
+
+.model-name-group {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 0.4em;
+    line-height: 1;
+}
+
+.model-name-group .model-title,
+.model-name-group .effort-pill {
+    line-height: 1;
+}
+
+.effort-pill {
+    display: inline-block;
+    padding: 0.05em 0.45em;
+    border-radius: 0.35em;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    font-size: 0.78em;
+    font-weight: 500;
+    line-height: 1.3;
+    background: rgba(0, 0, 0, 0.04);
+    opacity: 0.95;
+}
+
+[data-theme="dark"] .effort-pill {
+    border-color: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .rank-medal {
@@ -1888,11 +1928,6 @@ a:focus {
 }
 
 /* Provider icon next to model name */
-.model-cell {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5em;
-}
 .provider-icon-wrap {
     display: inline-flex;
     align-items: center;
@@ -1978,7 +2013,7 @@ a:focus {
 .plot-container {
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
+    margin: 1rem 0 0.5rem;
     background: var(--bg-primary);
     padding: 0rem 2rem 0rem 0rem;
 }
@@ -1988,6 +2023,39 @@ a:focus {
     max-width: 100%;
     height: 500px;
     border-radius: 4px;
+}
+
+.plot-html-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.35rem 0.85rem;
+    padding: 0.75rem 1.5rem 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.65rem;
+    color: var(--text-primary);
+}
+
+.plot-legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    cursor: pointer;
+    user-select: none;
+    line-height: 1.2;
+}
+
+.plot-legend-item.is-hidden {
+    text-decoration: line-through;
+    opacity: 0.45;
+}
+
+.plot-legend-swatch {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    flex-shrink: 0;
 }
 
 .compute-plot-controls {

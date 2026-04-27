@@ -1,172 +1,202 @@
 {
-    "Opus-4.6": {
-        "score": 33.33,
-        "median_time_min": 12.0,
-        "time_ci_lo": 10.4,
-        "time_ci_hi": 13.7,
-        "median_turns": 72.5,
-        "turns_ci_lo": 67.0,
-        "turns_ci_hi": 81.0,
-        "num_instances": 102
-    },
-    "GPT-5.4 (xhigh)": {
-        "score": 31.37,
-        "median_time_min": 42.3,
-        "time_ci_lo": 39.7,
-        "time_ci_hi": 47.8,
-        "median_turns": 103.0,
-        "turns_ci_lo": 96.0,
-        "turns_ci_hi": 103.0,
-        "num_instances": 102
-    },
-    "GPT-5.2": {
-        "score": 27.45,
-        "median_time_min": 42.0,
-        "time_ci_lo": 39.3,
-        "time_ci_hi": 46.3,
-        "median_turns": 103.0,
-        "turns_ci_lo": 103.0,
-        "turns_ci_hi": 103.0,
-        "num_instances": 96
-    },
-    "Opus-4.5": {
-        "score": 26.47,
-        "median_time_min": 9.9,
-        "time_ci_lo": 9.1,
-        "time_ci_hi": 11.3,
-        "median_turns": 57.0,
-        "turns_ci_lo": 55.0,
-        "turns_ci_hi": 61.5,
-        "num_instances": 102
-    },
-    "GPT-5.4 (high)": {
-        "score": 25.49,
-        "median_time_min": 17.9,
-        "time_ci_lo": 16.1,
-        "time_ci_hi": 19.8,
-        "median_turns": 72.0,
-        "turns_ci_lo": 65.0,
-        "turns_ci_hi": 77.5,
-        "num_instances": 102
-    },
-    "Gemini-3.1-Pro": {
-        "score": 22.55,
-        "median_time_min": 10.4,
-        "time_ci_lo": 8.9,
-        "time_ci_hi": 13.4,
-        "median_turns": 57.0,
-        "turns_ci_lo": 53.0,
-        "turns_ci_hi": 67.0,
-        "num_instances": 101
-    },
-    "Gemini-3-Pro": {
-        "score": 18.63,
-        "median_time_min": 11.7,
-        "time_ci_lo": 8.3,
-        "time_ci_hi": 13.0,
-        "median_turns": 54.0,
-        "turns_ci_lo": 46.0,
-        "turns_ci_hi": 62.5,
-        "num_instances": 102
-    },
-    "Sonnet-4.5": {
-        "score": 14.71,
-        "median_time_min": 12.6,
-        "time_ci_lo": 11.5,
-        "time_ci_hi": 13.2,
-        "median_turns": 87.5,
-        "turns_ci_lo": 83.0,
-        "turns_ci_hi": 94.5,
-        "num_instances": 102
-    },
-    "GPT-5.1": {
-        "score": 13.73,
-        "median_time_min": 31.2,
-        "time_ci_lo": 26.8,
-        "time_ci_hi": 35.1,
-        "median_turns": 65.0,
-        "turns_ci_lo": 62.0,
-        "turns_ci_hi": 74.0,
-        "num_instances": 97
-    },
-    "Gemini-3-Flash": {
-        "score": 9.8,
-        "median_time_min": 10.2,
-        "time_ci_lo": 7.9,
-        "time_ci_hi": 12.4,
-        "median_turns": 59.0,
-        "turns_ci_lo": 54.0,
-        "turns_ci_hi": 69.5,
-        "num_instances": 102
-    },
-    "o3": {
-        "score": 8.82,
-        "median_time_min": 22.1,
-        "time_ci_lo": 18.0,
-        "time_ci_hi": 28.0,
-        "median_turns": 89.0,
-        "turns_ci_lo": 72.0,
-        "turns_ci_hi": 102.0,
-        "num_instances": 102
-    },
-    "GPT-5": {
-        "score": 6.86,
-        "median_time_min": 17.5,
-        "time_ci_lo": 15.8,
-        "time_ci_hi": 19.7,
-        "median_turns": 45.0,
-        "turns_ci_lo": 41.0,
-        "turns_ci_hi": 48.0,
-        "num_instances": 100
-    },
-    "Opus-4": {
-        "score": 6.86,
-        "median_time_min": 15.6,
-        "time_ci_lo": 14.1,
-        "time_ci_hi": 18.4,
-        "median_turns": 55.5,
-        "turns_ci_lo": 49.0,
-        "turns_ci_hi": 61.0,
-        "num_instances": 102
-    },
-    "Kimi-K2": {
-        "score": 4.9,
-        "median_time_min": 35.3,
-        "time_ci_lo": 29.8,
-        "time_ci_hi": 40.8,
-        "median_turns": 78.0,
-        "turns_ci_lo": 69.0,
-        "turns_ci_hi": 87.0,
-        "num_instances": 102
-    },
-    "Sonnet-4": {
-        "score": 3.92,
-        "median_time_min": 9.9,
-        "time_ci_lo": 7.6,
-        "time_ci_hi": 11.0,
-        "median_turns": 60.0,
-        "turns_ci_lo": 56.0,
-        "turns_ci_hi": 64.0,
-        "num_instances": 100
-    },
-    "Gemini-2.5-Pro": {
-        "score": 3.92,
-        "median_time_min": 11.1,
-        "time_ci_lo": 9.9,
-        "time_ci_hi": 13.9,
-        "median_turns": 76.0,
-        "turns_ci_lo": 62.0,
-        "turns_ci_hi": 85.0,
-        "num_instances": 101
-    },
-    "GLM-4.5-Air": {
-        "score": 2.94,
-        "median_time_min": 21.0,
-        "time_ci_lo": 17.6,
-        "time_ci_hi": 23.4,
-        "median_turns": 75.0,
-        "turns_ci_lo": 69.0,
-        "turns_ci_hi": 90.0,
-        "num_instances": 102
-    }
+  "Opus-4.6": {
+    "score": 33.33,
+    "median_time_min": 12.0,
+    "time_ci_lo": 10.4,
+    "time_ci_hi": 13.7,
+    "median_turns": 72.5,
+    "turns_ci_lo": 67.0,
+    "turns_ci_hi": 81.0,
+    "num_instances": 102
+  },
+  "GPT-5.4 (xhigh)": {
+    "score": 31.37,
+    "median_time_min": 42.3,
+    "time_ci_lo": 39.7,
+    "time_ci_hi": 47.8,
+    "median_turns": 103.0,
+    "turns_ci_lo": 96.0,
+    "turns_ci_hi": 103.0,
+    "num_instances": 102
+  },
+  "GPT-5.2 (high)": {
+    "score": 27.45,
+    "median_time_min": 42.0,
+    "time_ci_lo": 39.3,
+    "time_ci_hi": 46.3,
+    "median_turns": 103.0,
+    "turns_ci_lo": 103.0,
+    "turns_ci_hi": 103.0,
+    "num_instances": 96
+  },
+  "Opus-4.5": {
+    "score": 26.47,
+    "median_time_min": 9.9,
+    "time_ci_lo": 9.1,
+    "time_ci_hi": 11.3,
+    "median_turns": 57.0,
+    "turns_ci_lo": 55.0,
+    "turns_ci_hi": 61.5,
+    "num_instances": 102
+  },
+  "GPT-5.4 (high)": {
+    "score": 25.49,
+    "median_time_min": 17.9,
+    "time_ci_lo": 16.1,
+    "time_ci_hi": 19.8,
+    "median_turns": 72.0,
+    "turns_ci_lo": 65.0,
+    "turns_ci_hi": 77.5,
+    "num_instances": 102
+  },
+  "Gemini-3.1-Pro": {
+    "score": 22.55,
+    "median_time_min": 10.4,
+    "time_ci_lo": 8.9,
+    "time_ci_hi": 13.4,
+    "median_turns": 57.0,
+    "turns_ci_lo": 53.0,
+    "turns_ci_hi": 67.0,
+    "num_instances": 101
+  },
+  "Gemini-3-Pro": {
+    "score": 18.63,
+    "median_time_min": 11.7,
+    "time_ci_lo": 8.3,
+    "time_ci_hi": 13.0,
+    "median_turns": 54.0,
+    "turns_ci_lo": 46.0,
+    "turns_ci_hi": 62.5,
+    "num_instances": 102
+  },
+  "Sonnet-4.5": {
+    "score": 14.71,
+    "median_time_min": 12.6,
+    "time_ci_lo": 11.5,
+    "time_ci_hi": 13.2,
+    "median_turns": 87.5,
+    "turns_ci_lo": 83.0,
+    "turns_ci_hi": 94.5,
+    "num_instances": 102
+  },
+  "GPT-5.1 (high)": {
+    "score": 13.73,
+    "median_time_min": 31.2,
+    "time_ci_lo": 26.8,
+    "time_ci_hi": 35.1,
+    "median_turns": 65.0,
+    "turns_ci_lo": 62.0,
+    "turns_ci_hi": 74.0,
+    "num_instances": 97
+  },
+  "Gemini-3-Flash": {
+    "score": 9.8,
+    "median_time_min": 10.2,
+    "time_ci_lo": 7.9,
+    "time_ci_hi": 12.4,
+    "median_turns": 59.0,
+    "turns_ci_lo": 54.0,
+    "turns_ci_hi": 69.5,
+    "num_instances": 102
+  },
+  "GPT-5 (high)": {
+    "score": 6.86,
+    "median_time_min": 17.5,
+    "time_ci_lo": 15.8,
+    "time_ci_hi": 19.7,
+    "median_turns": 45.0,
+    "turns_ci_lo": 41.0,
+    "turns_ci_hi": 48.0,
+    "num_instances": 100
+  },
+  "Opus-4": {
+    "score": 6.86,
+    "median_time_min": 15.6,
+    "time_ci_lo": 14.1,
+    "time_ci_hi": 18.4,
+    "median_turns": 55.5,
+    "turns_ci_lo": 49.0,
+    "turns_ci_hi": 61.0,
+    "num_instances": 102
+  },
+  "Kimi-K2": {
+    "score": 4.9,
+    "median_time_min": 35.3,
+    "time_ci_lo": 29.8,
+    "time_ci_hi": 40.8,
+    "median_turns": 78.0,
+    "turns_ci_lo": 69.0,
+    "turns_ci_hi": 87.0,
+    "num_instances": 102
+  },
+  "Sonnet-4": {
+    "score": 3.92,
+    "median_time_min": 9.9,
+    "time_ci_lo": 7.6,
+    "time_ci_hi": 11.0,
+    "median_turns": 60.0,
+    "turns_ci_lo": 56.0,
+    "turns_ci_hi": 64.0,
+    "num_instances": 100
+  },
+  "Gemini-2.5-Pro": {
+    "score": 3.92,
+    "median_time_min": 11.1,
+    "time_ci_lo": 9.9,
+    "time_ci_hi": 13.9,
+    "median_turns": 76.0,
+    "turns_ci_lo": 62.0,
+    "turns_ci_hi": 85.0,
+    "num_instances": 101
+  },
+  "GLM-4.5-Air": {
+    "score": 2.94,
+    "median_time_min": 21.0,
+    "time_ci_lo": 17.6,
+    "time_ci_hi": 23.4,
+    "median_turns": 75.0,
+    "turns_ci_lo": 69.0,
+    "turns_ci_hi": 90.0,
+    "num_instances": 102
+  },
+  "Opus-4.7 (high)": {
+    "score": 44.12,
+    "median_time_min": 11.9,
+    "time_ci_lo": 9.4,
+    "time_ci_hi": 13.4,
+    "median_turns": 65.0,
+    "turns_ci_lo": 58.5,
+    "turns_ci_hi": 70.5,
+    "num_instances": 102
+  },
+  "GPT-5.5 (xhigh)": {
+    "score": 40.2,
+    "median_time_min": 12.3,
+    "time_ci_lo": 10.5,
+    "time_ci_hi": 15.9,
+    "median_turns": 61.0,
+    "turns_ci_lo": 56.5,
+    "turns_ci_hi": 69.5,
+    "num_instances": 102
+  },
+  "Opus-4.6 (high)": {
+    "score": 41.18,
+    "median_time_min": 16.4,
+    "time_ci_lo": 11.5,
+    "time_ci_hi": 18.2,
+    "median_turns": 75.5,
+    "turns_ci_lo": 71.0,
+    "turns_ci_hi": 86.5,
+    "num_instances": 102
+  },
+  "O3 (high)": {
+    "score": 8.82,
+    "median_time_min": 22.1,
+    "time_ci_lo": 18.0,
+    "time_ci_hi": 28.0,
+    "median_turns": 89.0,
+    "turns_ci_lo": 72.0,
+    "turns_ci_hi": 102.0,
+    "num_instances": 102
+  }
 }

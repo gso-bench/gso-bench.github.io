@@ -161,23 +161,39 @@ class ComputeMetricsPlotManager {
             }
         };
 
-        // Legend spacing plugin (same as opt1 threshold plot)
-        const legendSpacingPlugin = {
-            id: 'legendSpacing',
-            beforeInit(chart) {
-                const originalFit = chart.legend && chart.legend.fit ? chart.legend.fit : null;
-                if (!originalFit) return;
-                chart.legend.fit = function fit() {
-                    originalFit.call(this);
-                    this.height += 24;
-                };
+        // Custom HTML legend plugin — flex-wrap centered, click to toggle
+        const htmlLegendPlugin = {
+            id: 'htmlLegend',
+            afterUpdate(chart, _args, options) {
+                const container = document.getElementById(options.containerID);
+                if (!container) return;
+                container.innerHTML = '';
+                const items = chart.options.plugins.legend.labels.generateLabels(chart);
+                items.forEach((item) => {
+                    const li = document.createElement('span');
+                    li.className = 'plot-legend-item' + (item.hidden ? ' is-hidden' : '');
+                    li.onclick = () => {
+                        const meta = chart.getDatasetMeta(item.datasetIndex);
+                        meta.hidden = meta.hidden === null ? !chart.data.datasets[item.datasetIndex].hidden : null;
+                        chart.update();
+                    };
+                    const swatch = document.createElement('span');
+                    swatch.className = 'plot-legend-swatch';
+                    swatch.style.background = item.fillStyle;
+                    const label = document.createElement('span');
+                    label.className = 'plot-legend-label';
+                    label.textContent = item.text;
+                    li.appendChild(swatch);
+                    li.appendChild(label);
+                    container.appendChild(li);
+                });
             }
         };
 
         const config = {
             type: 'scatter',
             data: { datasets },
-            plugins: [errorBarPlugin, legendSpacingPlugin],
+            plugins: [errorBarPlugin, htmlLegendPlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -188,17 +204,10 @@ class ComputeMetricsPlotManager {
                 },
                 plugins: {
                     legend: {
-                        display: true,
-                        position: 'top',
-                        labels: {
-                            color: textColor,
-                            font: {
-                                family: 'Inter, sans-serif',
-                                size: 10
-                            },
-                            padding: 15,
-                            boxWidth: 12
-                        }
+                        display: false
+                    },
+                    htmlLegend: {
+                        containerID: 'compute-plot-legend'
                     },
                     tooltip: {
                         backgroundColor: 'rgba(0, 0, 0, 0.9)',
