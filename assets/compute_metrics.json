@@ -198,5 +198,25 @@
     "turns_ci_lo": 72.0,
     "turns_ci_hi": 102.0,
     "num_instances": 102
+  },
+  "Opus-4.8 (xhigh)": {
+    "score": 47.06,
+    "median_time_min": 29.4,
+    "time_ci_lo": 25.7,
+    "time_ci_hi": 39.3,
+    "median_turns": 80.5,
+    "turns_ci_lo": 73.0,
+    "turns_ci_hi": 91.5,
+    "num_instances": 102
+  },
+  "Sonnet-5 (xhigh)": {
+    "score": 37.25,
+    "median_time_min": 27.7,
+    "time_ci_lo": 24.9,
+    "time_ci_hi": 31.5,
+    "median_turns": 128.5,
+    "turns_ci_lo": 114.0,
+    "turns_ci_hi": 134.0,
+    "num_instances": 102
   }
 }

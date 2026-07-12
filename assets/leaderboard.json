@@ -1,6 +1,32 @@
 {
   "models": [
     {
+      "name": "Claude Opus 4.8",
+      "model_org": "Anthropic",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 47.06,
+      "score_hack_control": 47.06,
+      "date": "2026-07-12",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO",
+      "reasoning_effort": "xhigh"
+    },
+    {
+      "name": "Claude Sonnet 5",
+      "model_org": "Anthropic",
+      "scaffold": "OpenHands",
+      "setting": "Opt@1",
+      "score": 37.25,
+      "score_hack_control": 36.27,
+      "date": "2026-07-12",
+      "submission_org_logo": "",
+      "submission_org_url": "https://gso-bench.github.io/",
+      "submission_org_name": "GSO",
+      "reasoning_effort": "xhigh"
+    },
+    {
       "name": "Claude Opus 4.7",
       "model_org": "Anthropic",
       "scaffold": "OpenHands",
