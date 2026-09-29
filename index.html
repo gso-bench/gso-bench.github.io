@@ -16,7 +16,7 @@
     <meta name="twitter:title" content="GSO: Software Optimization Benchmark for SWE-Agents">
     <meta name="twitter:description" content="102 challenging optimization tasks across 10 codebases and 5 languages. Evaluate how well AI agents can match expert developer optimizations.">
     <meta name="twitter:image" content="https://gso-bench.github.io/assets/images/social-card.png">
-    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/style.css?v=thresholds-detail">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -88,20 +88,32 @@
                 </div>
 
                 <!-- Opt@1 vs Speedup Threshold Plot -->
-                <div class="plot-section">
+                <div class="plot-section" id="optimization-thresholds">
                     <h2 style="text-align: left;">Opt@1 vs Speedup Threshold (p)</h2>
                     <div>
                         <p>
-                            <strong>Opt<sub>p</sub>@1:</strong> Estimate of fraction of tasks where a single attempt achieves ≥p% human speedup and passes correctness tests.
+                            <strong>Opt<sub>p</sub>@1:</strong> Fraction of tasks where a correct patch exceeds <em>p</em> times the human reference speed, using the harmonic mean across test workloads.
                         </p>
                         <p>
-                            p=0.95 is our default threshold, but it can be a knob for difficulty for a task; i.e., p=0 evaluates if the agent's patch is correct, regardless of performance, 
-                            while p=1 evaluates if the agent's patch is identical/better in performance to the human commit.
+                            p=0.95 is the leaderboard default. At p=1, the patch must beat the human reference; at p=2, it must be more than twice as fast.
+                            p=0 checks correctness only. Positive thresholds also require a speedup over the original code. These curves use raw scores before hack adjustment.
                         </p>
                     </div>
+                    <p class="threshold-note">The earlier Opus-4.6 curve ends at 1× because the original runs needed to extend it are unavailable.</p>
                     <div id="opt1-threshold-legend" class="plot-html-legend"></div>
-                    <div class="plot-container">
-                        <canvas id="opt1-threshold-plot"></canvas>
+                    <div class="threshold-panels">
+                        <div class="threshold-panel">
+                            <h3>Up to the human reference</h3>
+                            <div class="plot-container">
+                                <canvas id="opt1-threshold-detail-plot" role="img" aria-label="Opt at one for thresholds from zero to one"></canvas>
+                            </div>
+                        </div>
+                        <div class="threshold-panel">
+                            <h3>Beyond the human reference</h3>
+                            <div class="plot-container">
+                                <canvas id="opt1-threshold-plot" role="img" aria-label="Opt at one for thresholds from one to sixteen on a logarithmic scale"></canvas>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -132,7 +144,7 @@
     </footer>
 
     <script src="assets/script.js"></script>
-    <script src="assets/opt1-plot.js"></script>
+    <script src="assets/opt1-plot.js?v=thresholds-powers"></script>
     <script src="assets/compute-plot.js"></script>
 </body>
 </html>

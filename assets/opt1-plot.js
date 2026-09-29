@@ -1,7 +1,9 @@
 // Opt@1 vs Speedup Threshold Plot Manager using Chart.js
 class Opt1ThresholdPlotManager {
     constructor() {
-        this.chart = null;
+        this.charts = [];
+        this.hiddenModels = new Map();
+        this.themeObserver = null;
         this.data = null;
         this.colors = [
             '#1f77b4', // Blue
@@ -28,7 +30,8 @@ class Opt1ThresholdPlotManager {
     async init() {
         try {
             await this.loadData();
-            this.createChart();
+            this.createCharts();
+            this.setupThemeListener();
         } catch (error) {
             console.error('Failed to initialize Opt@1 threshold plot:', error);
         }
@@ -36,7 +39,7 @@ class Opt1ThresholdPlotManager {
     
     async loadData() {
         try {
-            const response = await fetch('assets/opt1_thresholded.json');
+            const response = await fetch('assets/opt1_thresholded.json?v=thresholds-powers');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -47,23 +50,24 @@ class Opt1ThresholdPlotManager {
         }
     }
     
-    createChart() {
-        const canvas = document.getElementById('opt1-threshold-plot');
-        if (!canvas || !this.data) return;
-        
-        // Destroy existing chart if it exists
-        if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
+    createCharts() {
+        this.charts.forEach(chart => chart.destroy());
+        this.charts = [];
+        for (const range of [
+            {canvasId: 'opt1-threshold-detail-plot', minThreshold: 0, maxThreshold: 1, tickStep: 0.1},
+            {canvasId: 'opt1-threshold-plot', minThreshold: 1, maxThreshold: 16, tickStep: 1, scaleType: 'logarithmic', tickValues: [1, 2, 4, 8, 16]}
+        ]) {
+            const chart = this.createChart(range);
+            if (chart) this.charts.push(chart);
         }
-        
-        // Also destroy any Chart.js instances on this canvas
-        Chart.helpers.each(Chart.instances, function(chart) {
-            if (chart.canvas.id === 'opt1-threshold-plot') {
-                chart.destroy();
-            }
-        });
-        
+    }
+
+    createChart({canvasId, minThreshold, maxThreshold, tickStep, scaleType = 'linear', tickValues}) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas || !this.data) return null;
+        Chart.getChart(canvas)?.destroy();
+        const manager = this;
+
         // Get theme colors from the root per current data-theme
         const rootEl = document.documentElement;
         const textColor = getComputedStyle(rootEl).getPropertyValue('--text-primary').trim();
@@ -81,7 +85,7 @@ class Opt1ThresholdPlotManager {
         const DEFAULT_VISIBLE = 10;
         const datasets = entries.map(([model, points], index) => ({
             label: model,
-            data: points.map(point => ({
+            data: points.filter(point => point.threshold >= minThreshold && point.threshold <= maxThreshold).map(point => ({
                 x: point.threshold,
                 y: point.mean
             })),
@@ -91,8 +95,8 @@ class Opt1ThresholdPlotManager {
             pointRadius: 3,
             pointHoverRadius: 6,
             fill: false,
-            tension: 0.1,
-            hidden: index >= DEFAULT_VISIBLE
+            tension: 0,
+            hidden: this.hiddenModels.get(model) ?? (index >= DEFAULT_VISIBLE)
         }));
         
         // Custom HTML legend plugin — flex-wrap centered, click to toggle
@@ -108,9 +112,10 @@ class Opt1ThresholdPlotManager {
                     li.className = 'plot-legend-item' + (item.hidden ? ' is-hidden' : '');
                     li.style.setProperty('--swatch-color', item.fillStyle);
                     li.onclick = () => {
-                        const meta = chart.getDatasetMeta(item.datasetIndex);
-                        meta.hidden = meta.hidden === null ? !chart.data.datasets[item.datasetIndex].hidden : null;
-                        chart.update();
+                        const visible = !chart.isDatasetVisible(item.datasetIndex);
+                        manager.hiddenModels.set(item.text, !visible);
+                        manager.charts.forEach(panel => panel.setDatasetVisibility(item.datasetIndex, visible));
+                        manager.charts.forEach(panel => panel.update());
                     };
                     const swatch = document.createElement('span');
                     swatch.className = 'plot-legend-swatch';
@@ -125,25 +130,39 @@ class Opt1ThresholdPlotManager {
             }
         };
         
-        // Add custom plugin to draw vertical line at x=0.95
-        const verticalLinePlugin = {
-            id: 'verticalLine',
-            afterDraw(chart) {
-                const ctx = chart.ctx;
-                const xScale = chart.scales.x;
-                const yScale = chart.scales.y;
-                
-                const xValue = 0.95;
-                const xPixel = xScale.getPixelForValue(xValue);
-                
+        // Mark the leaderboard cutoff and the human reference boundary.
+        const referencePlugin = {
+            id: 'referenceThresholds',
+            beforeDraw(chart) {
+                const {ctx, scales: {x, y}} = chart;
+                if (x.max <= 1) return;
+                const boundary = x.getPixelForValue(1);
                 ctx.save();
-                ctx.strokeStyle = '#666666';
-                ctx.lineWidth = 2;
-                ctx.setLineDash([5, 5]);
-                ctx.beginPath();
-                ctx.moveTo(xPixel, yScale.top);
-                ctx.lineTo(xPixel, yScale.bottom);
-                ctx.stroke();
+                ctx.fillStyle = 'rgba(59, 130, 246, 0.06)';
+                ctx.fillRect(boundary, y.top, x.right - boundary, y.bottom - y.top);
+                ctx.restore();
+            },
+            afterDraw(chart) {
+                const {ctx, scales: {x, y}} = chart;
+                ctx.save();
+                for (const [value, dash] of [[0.95, [3, 4]], [1, []]]) {
+                    if (value < x.min || value > x.max) continue;
+                    const pixel = x.getPixelForValue(value);
+                    ctx.strokeStyle = value === 1 ? textColor : gridColor;
+                    ctx.lineWidth = value === 1 ? 1.5 : 1;
+                    ctx.setLineDash(dash);
+                    ctx.beginPath();
+                    ctx.moveTo(pixel, y.top);
+                    ctx.lineTo(pixel, y.bottom);
+                    ctx.stroke();
+                }
+                const boundary = x.getPixelForValue(1);
+                ctx.fillStyle = textColor;
+                ctx.font = '12px Inter, sans-serif';
+                ctx.textAlign = 'left';
+                if (x.right - boundary > 160) {
+                    ctx.fillText('1× human reference', boundary + 8, y.top + 17);
+                }
                 ctx.restore();
             }
         };
@@ -154,7 +173,7 @@ class Opt1ThresholdPlotManager {
             data: {
                 datasets: datasets
             },
-            plugins: [htmlLegendPlugin, verticalLinePlugin],
+            plugins: [htmlLegendPlugin, referencePlugin],
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
@@ -191,18 +210,23 @@ class Opt1ThresholdPlotManager {
                             },
                             label: function(context) {
                                 const point = context.parsed;
-                                return `Opt@1: ${point.y.toFixed(1)}% at p=${point.x}`;
+                                return `Opt@1: ${point.y.toFixed(1)}% at ${point.x}× reference`;
                             }
                         }
                     }
                 },
                 scales: {
                     x: {
-                        type: 'linear',
+                        type: scaleType,
                         position: 'bottom',
+                        min: minThreshold,
+                        max: maxThreshold,
+                        afterBuildTicks: function(scale) {
+                            if (tickValues) scale.ticks = tickValues.map(value => ({value, major: true}));
+                        },
                         title: {
                             display: true,
-                            text: 'Speedup Threshold (p)',
+                            text: scaleType === 'logarithmic' ? 'Speed relative to reference (p, log scale)' : 'Speed relative to reference (p)',
                             color: textColor,
                             font: {
                                 family: 'Inter, sans-serif',
@@ -216,9 +240,9 @@ class Opt1ThresholdPlotManager {
                                 family: 'Inter, sans-serif',
                                 size: 14
                             },
-                            stepSize: 0.1,
+                            stepSize: tickStep,
                             callback: function(value) {
-                                return value.toFixed(1);
+                                return tickStep < 1 ? value.toFixed(1) : value;
                             }
                         },
                         grid: {
@@ -260,15 +284,13 @@ class Opt1ThresholdPlotManager {
         };
         
         // Create the chart
-        this.chart = new Chart(canvas, config);
+        return new Chart(canvas, config);
         
-        // Listen for theme changes
-        this.setupThemeListener();
     }
     
     setupThemeListener() {
         // Listen for theme changes and update chart colors
-        const observer = new MutationObserver((mutations) => {
+        this.themeObserver = new MutationObserver((mutations) => {
             mutations.forEach((mutation) => {
                 if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
                     // Add a small delay to ensure CSS has time to update
@@ -279,29 +301,19 @@ class Opt1ThresholdPlotManager {
             });
         });
         
-        observer.observe(document.documentElement, {
+        this.themeObserver.observe(document.documentElement, {
             attributes: true,
             attributeFilter: ['data-theme']
         });
     }
     
     updateChartTheme() {
-        if (!this.chart) return;
-        
-        // Force recreation of chart to ensure proper theme colors
-        this.chart.destroy();
-        this.chart = null;
-        
-        // Recreate chart with new theme colors
-        setTimeout(() => {
-            this.createChart();
-        }, 100);
+        if (this.charts.length) this.createCharts();
     }
-    
+
     destroy() {
-        if (this.chart) {
-            this.chart.destroy();
-            this.chart = null;
-        }
+        this.charts.forEach(chart => chart.destroy());
+        this.charts = [];
+        this.themeObserver?.disconnect();
     }
 }

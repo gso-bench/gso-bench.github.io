@@ -2025,6 +2025,47 @@ a:focus {
     border-radius: 4px;
 }
 
+
+.threshold-panels {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+}
+
+.threshold-panel {
+    min-width: 0;
+}
+
+.threshold-panel h3 {
+    margin: 1.25rem 0 0;
+    color: var(--text-primary);
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.threshold-panels .plot-container {
+    display: block;
+    position: relative;
+    height: 420px;
+    padding: 0;
+}
+
+@media (max-width: 900px) {
+    .threshold-panels {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .threshold-panels .plot-container {
+        height: 360px;
+    }
+}
+
+.threshold-note {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
 .plot-html-legend {
     display: flex;
     flex-wrap: wrap;
