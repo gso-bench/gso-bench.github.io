@@ -218,5 +218,45 @@
     "turns_ci_lo": 114.0,
     "turns_ci_hi": 134.0,
     "num_instances": 102
+  },
+  "Fable-5.1 (xhigh)": {
+    "score": 88.24,
+    "median_time_min": 65.3,
+    "time_ci_lo": 62.2,
+    "time_ci_hi": 72.8,
+    "median_turns": 170.0,
+    "turns_ci_lo": 160.0,
+    "turns_ci_hi": 188.0,
+    "num_instances": 101
+  },
+  "GPT-6 Astra (xhigh)": {
+    "score": 79.41,
+    "median_time_min": 22.7,
+    "time_ci_lo": 20.2,
+    "time_ci_hi": 24.5,
+    "median_turns": 59.0,
+    "turns_ci_lo": 54.0,
+    "turns_ci_hi": 63.0,
+    "num_instances": 102
+  },
+  "Fable-5 (xhigh)": {
+    "score": 78.43,
+    "median_time_min": 39.1,
+    "time_ci_lo": 32.8,
+    "time_ci_hi": 42.9,
+    "median_turns": 96.5,
+    "turns_ci_lo": 90.5,
+    "turns_ci_hi": 106.0,
+    "num_instances": 100
+  },
+  "GPT-5.6 Sol (xhigh)": {
+    "score": 76.47,
+    "median_time_min": 19.0,
+    "time_ci_lo": 16.7,
+    "time_ci_hi": 21.8,
+    "median_turns": 93.0,
+    "turns_ci_lo": 84.0,
+    "turns_ci_hi": 103.0,
+    "num_instances": 102
   }
 }
